@@ -1,0 +1,272 @@
+﻿@model ElectionShield.ViewModels.CreateReportViewModel
+@{
+    ViewData["Title"] = "Report Election Incident";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white py-3">
+                <h2 class="h4 mb-0"><i class="fas fa-flag me-2"></i>Report Election Incident</h2>
+                <p class="mb-0 opacity-75">Help protect election integrity by reporting incidents anonymously</p>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post" enctype="multipart/form-data" id="reportForm">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Title" class="form-label fw-semibold">Incident Title *</label>
+                                <input asp-for="Title" class="form-control form-control-lg" placeholder="Brief, descriptive title of the incident" />
+                                <span asp-validation-for="Title" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Category" class="form-label fw-semibold">Incident Category *</label>
+                                <select asp-for="Category" class="form-select form-select-lg">
+                                    <option value="">Select Category</option>
+                                    <option value="Voter Intimidation">Voter Intimidation</option>
+                                    <option value="Ballot Tampering">Ballot Tampering</option>
+                                    <option value="Polling Station Issues">Polling Station Issues</option>
+                                    <option value="Fraudulent Voting">Fraudulent Voting</option>
+                                    <option value="Technical Glitches">Technical Glitches</option>
+                                    <option value="Campaign Violations">Campaign Violations</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span asp-validation-for="Category" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold">Detailed Description *</label>
+                        <textarea asp-for="Description" class="form-control" rows="5" placeholder="Provide comprehensive details about the incident: what happened, when, where, who was involved, and any other relevant information"></textarea>
+                        <div class="form-text">Please be as detailed and accurate as possible.</div>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Location" class="form-label fw-semibold">Location Description *</label>
+                        <input asp-for="Location" class="form-control" placeholder="Street address, polling station name, landmark, or area" id="locationInput" />
+                        <span asp-validation-for="Location" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Latitude" class="form-label fw-semibold">Latitude *</label>
+                            <input asp-for="Latitude" class="form-control" id="latitude" readonly />
+                            <span asp-validation-for="Latitude" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Longitude" class="form-label fw-semibold">Longitude *</label>
+                            <input asp-for="Longitude" class="form-control" id="longitude" readonly />
+                            <span asp-validation-for="Longitude" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-semibold">Select Location on Map *</label>
+                        <div id="map" style="height: 300px; width: 100%; border-radius: 0.375rem; border: 1px solid #dee2e6;"></div>
+                        <div class="form-text">Click on the map to mark the exact location of the incident</div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-semibold">Upload Evidence</label>
+                        <div class="file-upload-area border rounded p-4 text-center">
+                            <input type="file" asp-for="MediaFiles" class="form-control" multiple
+                                   accept="image/*,video/*,.pdf,.doc,.docx,.txt" id="fileInput" />
+                            <div class="mt-2">
+                                <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
+                                <p class="text-muted mb-1">Drag & drop files here or click to browse</p>
+                                <small class="text-muted">Maximum file size: 10MB per file. Supported formats: Images, Videos, PDF, DOC, TXT</small>
+                            </div>
+                        </div>
+                        <div id="filePreview" class="mt-3"></div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="ReporterEmail" class="form-label fw-semibold">Email Address (Optional)</label>
+                                <input asp-for="ReporterEmail" class="form-control" placeholder="Bishwas@gmail.com" />
+                                <span asp-validation-for="ReporterEmail" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="ReporterPhone" class="form-label fw-semibold">Phone Number (Optional)</label>
+                                <input asp-for="ReporterPhone" class="form-control" placeholder="+9866317885" />
+                                <span asp-validation-for="ReporterPhone" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="IsAnonymous" class="form-check-input" checked />
+                        <label asp-for="IsAnonymous" class="form-check-label fw-semibold">
+                            Submit anonymously (Recommended)
+                        </label>
+                        <div class="form-text">Your personal information will not be stored if you choose to remain anonymous.</div>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="Confirmation" class="form-check-input" required />
+                        <label asp-for="Confirmation" class="form-check-label fw-semibold">
+                            I confirm that this report is accurate to the best of my knowledge
+                        </label>
+                        <span asp-validation-for="Confirmation" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Report
+                        </button>
+                        <a asp-action="Track" class="btn btn-outline-secondary btn-lg px-5">
+                            <i class="fas fa-search me-2"></i>Track Report
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        var map = L.map('map').setView([20.5937, 78.9629], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker;
+        var latitudeInput = document.getElementById('latitude');
+        var longitudeInput = document.getElementById('longitude');
+
+        // Set initial coordinates (India center)
+        latitudeInput.value = '20.5937';
+        longitudeInput.value = '78.9629';
+
+        map.on('click', function (e) {
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            marker = L.marker(e.latlng).addTo(map);
+            latitudeInput.value = e.latlng.lat.toFixed(6);
+            longitudeInput.value = e.latlng.lng.toFixed(6);
+
+            // Reverse geocoding to get address
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById('locationInput').value = data.display_name;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Get user's current location
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+
+                    map.setView([lat, lng], 15);
+
+                    if (!marker) {
+                        marker = L.marker([lat, lng]).addTo(map);
+                    } else {
+                        marker.setLatLng([lat, lng]);
+                    }
+
+                    latitudeInput.value = lat.toFixed(6);
+                    longitudeInput.value = lng.toFixed(6);
+
+                    // Get address for current location
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.display_name) {
+                                document.getElementById('locationInput').value = data.display_name;
+                            }
+                        });
+                }, function (error) {
+                    console.log('Geolocation error:', error);
+                });
+            }
+        }
+
+        // Add current location button
+        L.control.locate({
+            position: 'topright',
+            strings: {
+                title: "Show my location"
+            }
+        }).addTo(map);
+
+        // File upload preview
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            const preview = document.getElementById('filePreview');
+            preview.innerHTML = '';
+
+            Array.from(e.target.files).forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'alert alert-info d-flex justify-content-between align-items-center';
+
+                let fileTypeIcon = 'fas fa-file';
+                if (file.type.startsWith('image/')) fileTypeIcon = 'fas fa-image';
+                else if (file.type.startsWith('video/')) fileTypeIcon = 'fas fa-video';
+                else if (file.type === 'application/pdf') fileTypeIcon = 'fas fa-file-pdf';
+
+                fileItem.innerHTML = `
+                            <div>
+                                <i class="${fileTypeIcon} me-2"></i>
+                                ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)
+                            </div>
+                            <div class="text-success">
+                                <i class="fas fa-check"></i> Ready
+                            </div>
+                        `;
+
+                preview.appendChild(fileItem);
+            });
+        });
+
+        // Get current location on page load
+        getCurrentLocation();
+    </script>
+
+    <style>
+        .file-upload-area {
+            border: 2px dashed #dee2e6;
+            transition: border-color 0.3s ease;
+            background: #f8f9fa;
+        }
+
+            .file-upload-area:hover {
+                border-color: #0d6efd;
+                background: #e7f1ff;
+            }
+
+            .file-upload-area.dragover {
+                border-color: #0d6efd;
+                background: #e7f1ff;
+            }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+        }
+
+        .card-header {
+            border-radius: 1rem 1rem 0 0 !important;
+        }
+    </style>
+}

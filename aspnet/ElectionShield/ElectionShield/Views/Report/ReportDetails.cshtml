@@ -1,0 +1,174 @@
+﻿@model ElectionShield.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = "Report Details";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header bg-white py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="h4 mb-0">Report Details</h2>
+                    <div>
+                        <span class="badge @Model.StatusBadgeClass fs-6">@Model.Status</span>
+                        <span class="badge @Model.PriorityBadgeClass fs-6 ms-1">@Model.Priority</span>
+                    </div>
+                </div>
+                <div class="text-muted small mt-1">
+                    <i class="fas fa-hashtag me-1"></i>@Model.ReportCode •
+                    <i class="fas fa-clock me-1"></i>@Model.CreatedAtFormatted (@Model.TimeAgo)
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="text-primary">@Model.Title</h4>
+                        <p class="lead">@Model.Description</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-semibold mb-3"><i class="fas fa-map-marker-alt me-2 text-danger"></i>Location Details</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><strong>Address:</strong> @Model.Location</li>
+                            <li class="mb-2"><strong>Coordinates:</strong> @Model.Latitude.ToString("F6"), @Model.Longitude.ToString("F6")</li>
+                            <li class="mb-2"><strong>Category:</strong> @Model.Category</li>
+                            <li><strong>Anonymous:</strong> @(Model.IsAnonymous ? "Yes" : "No")</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-semibold mb-3"><i class="fas fa-info-circle me-2 text-info"></i>Report Information</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><strong>Status:</strong> <span class="badge @Model.StatusBadgeClass">@Model.Status</span></li>
+                            <li class="mb-2"><strong>Priority:</strong> <span class="badge @Model.PriorityBadgeClass">@Model.Priority</span></li>
+                            <li class="mb-2"><strong>Views:</strong> @Model.ViewCount</li>
+                            <li><strong>Last Updated:</strong> @(Model.UpdatedAt?.ToString("MMM dd, yyyy h:mm tt") ?? "Never")</li>
+                        </ul>
+                    </div>
+                </div>
+
+                @if (Model.MediaFiles.Any())
+                {
+                    <div class="mt-4">
+                        <h6 class="fw-semibold mb-3"><i class="fas fa-paperclip me-2 text-success"></i>Attached Evidence</h6>
+                        <div class="row g-3">
+                            @foreach (var media in Model.MediaFiles)
+                            {
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            @if (media.IsImage)
+                                            {
+                                                <img src="~/@media.FilePath" class="img-fluid rounded mb-2" style="max-height: 150px; object-fit: cover;" alt="@media.FileName" />
+                                            }
+                                            else if (media.IsVideo)
+                                            {
+                                                <i class="fas fa-video text-primary fa-3x mb-2"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fas fa-file text-secondary fa-3x mb-2"></i>
+                                            }
+                                            <h6 class="card-title small">@media.FileName</h6>
+                                            <p class="card-text text-muted small">@media.FileSizeFormatted</p>
+                                            <a href="~/@media.FilePath" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="mt-4" id="locationMap" style="height: 300px; border-radius: 0.375rem;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        @if (Model.Verification != null)
+        {
+            <div class="card shadow border-0 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-user-shield me-2 text-warning"></i>Admin Verification</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <span class="badge @Model.Verification.StatusBadgeClass float-end">@Model.Verification.Status</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Verified By:</strong>
+                        <span class="float-end">@Model.Verification.AdminUserFullName</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Verified At:</strong>
+                        <span class="float-end">@Model.Verification.VerifiedAtFormatted</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Verification.Comments))
+                    {
+                        <div class="mb-3">
+                            <strong>Comments:</strong>
+                            <p class="mt-2 p-3 bg-light rounded">@Model.Verification.Comments</p>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Verification.ActionTaken))
+                    {
+                        <div class="mb-3">
+                            <strong>Action Taken:</strong>
+                            <p class="mt-2 p-3 bg-light rounded">@Model.Verification.ActionTaken</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (Model.AIAnalysis != null)
+        {
+            <div class="card shadow border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-robot me-2 text-info"></i>AI Analysis</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <span class="badge @Model.AIAnalysis.StatusBadgeClass float-end">@Model.AIAnalysis.Status</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Confidence Score:</strong>
+                        <span class="float-end">@Model.AIAnalysis.ConfidenceScoreFormatted</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Analyzed At:</strong>
+                        <span class="float-end">@Model.AIAnalysis.AnalyzedAtFormatted</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.AIAnalysis.AnalysisResult))
+                    {
+                        <div class="mb-3">
+                            <strong>Analysis Result:</strong>
+                            <p class="mt-2 p-3 bg-light rounded small">@Model.AIAnalysis.AnalysisResult</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize map with report location
+        var map = L.map('locationMap').setView([@Model.Latitude, @Model.Longitude], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add marker for report location
+        L.marker([@Model.Latitude, @Model.Longitude])
+            .addTo(map)
+            .bindPopup('@Model.Location')
+            .openPopup();
+    </script>
+}

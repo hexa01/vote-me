@@ -1,0 +1,154 @@
+﻿@model List<ElectionShield.ViewModels.ReportViewModel>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Admin Dashboard</h1>
+        <div>
+            <span class="badge bg-primary fs-6">Total Reports: @Model.Count</span>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Pending Reports</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(r => r.Status == ReportStatus.Pending)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Verified Reports</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(r => r.Status == ReportStatus.Verified)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Under Review</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(r => r.Status == ReportStatus.UnderReview)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-search fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">High Priority</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(r => r.Priority == ReportPriority.High || r.Priority == ReportPriority.Critical)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Recent Reports</h6>
+                <a asp-action="PendingReports" class="btn btn-primary btn-sm">
+                    <i class="fas fa-list me-1"></i>View Pending Reports
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="reportsTable" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Report Code</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var report in Model.OrderByDescending(r => r.CreatedAt).Take(20))
+                        {
+                            <tr>
+                                <td>
+                                    <code>@report.ReportCode</code>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@report.Title</div>
+                                    <small class="text-muted">@report.Location</small>
+                                </td>
+                                <td>@report.Category</td>
+                                <td>
+                                    <span class="badge @report.StatusBadgeClass">@report.Status</span>
+                                </td>
+                                <td>
+                                    <span class="badge @report.PriorityBadgeClass">@report.Priority</span>
+                                </td>
+                                <td>
+                                    <small>@report.TimeAgo</small>
+                                </td>
+                                <td>
+                                    <a asp-action="ReportDetails" asp-route-id="@report.Id" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize DataTables
+        $(document).ready(function() {
+            $('#reportsTable').DataTable({
+                pageLength: 10,
+                order: [[5, 'desc']],
+                language: {
+                    search: "Search reports:",
+                    lengthMenu: "Show _MENU_ reports"
+                }
+            });
+        });
+    </script>
+}

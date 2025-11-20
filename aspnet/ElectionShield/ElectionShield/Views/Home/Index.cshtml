@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "ElectionShield - Protect Democracy";
+}
+
+<div class="hero-section bg-primary text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Protect Election Integrity</h1>
+                <p class="lead mb-4">Report election-related incidents anonymously. Help us maintain fair and transparent elections through community vigilance.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a asp-controller="Report" asp-action="Create" class="btn btn-light btn-lg px-4 me-md-2">Report Incident</a>
+                    <a asp-controller="Report" asp-action="Track" class="btn btn-outline-light btn-lg px-4">Track Report</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image">
+                    <i class="fas fa-shield-alt display-1 text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h2 class="mb-4">How It Works</h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-edit fa-lg"></i>
+                    </div>
+                    <h4 class="card-title">1. Report Incident</h4>
+                    <p class="card-text">Submit detailed information about election irregularities, fraud, or breaches with evidence like photos and videos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="step-number bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-search fa-lg"></i>
+                    </div>
+                    <h4 class="card-title">2. AI Analysis</h4>
+                    <p class="card-text">Our system automatically analyzes submitted content for verification and patterns using advanced AI technology.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="step-number bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-user-shield fa-lg"></i>
+                    </div>
+                    <h4 class="card-title">3. Admin Verification</h4>
+                    <p class="card-text">Trained administrators review and verify reports, taking appropriate action and escalating when necessary.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Important Notice</h4>
+                <p class="mb-0">This platform is designed for reporting genuine election-related concerns. False reporting may lead to legal consequences. Your anonymity is protected.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        border-radius: 0 0 2rem 2rem;
+    }
+
+    .step-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+    }
+</style>

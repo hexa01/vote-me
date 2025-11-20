@@ -1,0 +1,53 @@
+﻿@model ElectionShield.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = "Track Report Status";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow border-0">
+            <div class="card-header bg-info text-white py-3">
+                <h2 class="h4 mb-0"><i class="fas fa-search me-2"></i>Track Report Status</h2>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Track" method="post" id="trackForm">
+                    <div class="form-group mb-4">
+                        <label asp-for="ReportCode" class="form-label fw-semibold">Enter Your Report Code</label>
+                        <input asp-for="ReportCode" class="form-control form-control-lg text-uppercase"
+                               placeholder="e.g., A1B2C3D4E5" style="letter-spacing: 2px; font-family: 'Courier New', monospace;" />
+                        <div class="form-text">Enter the 10-character code you received when submitting your report</div>
+                        <span asp-validation-for="ReportCode" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>Track Report
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="fw-semibold mb-3">Don't have your code?</h6>
+                    <p class="text-muted mb-3">If you've lost your report code, please contact our support team with the following information:</p>
+                    <ul class="text-muted">
+                        <li>Date and time of submission</li>
+                        <li>Location of the incident</li>
+                        <li>Email/phone used (if provided)</li>
+                    </ul>
+                    <a href="mailto:support@electionshield.com" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-envelope me-1"></i>Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('ReportCode').addEventListener('input', function (e) {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+    </script>
+}
