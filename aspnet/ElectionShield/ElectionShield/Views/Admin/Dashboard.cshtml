@@ -1,137 +1,305 @@
-﻿@model List<ElectionShield.ViewModels.ReportViewModel>
+﻿@model ElectionShield.ViewModels.AdminDashboardViewModel
 @{
     ViewData["Title"] = "Admin Dashboard";
+    Layout = "_AdminLayout";
+    ViewBag.ActiveSection = Model.ActiveSection;
+    ViewBag.PendingCount = Model.PendingReports;
 }
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Admin Dashboard</h1>
-        <div>
-            <span class="badge bg-primary fs-6">Total Reports: @Model.Count</span>
-        </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="fas fa-tachometer-alt text-primary me-2"></i>
+        Admin Dashboard
+    </h1>
+    <div class="text-muted">
+        Last updated: @DateTime.Now.ToString("MMM dd, yyyy HH:mm")
     </div>
+</div>
 
-    <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Pending Reports</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(r => r.Status == ReportStatus.Pending)</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clock fa-2x text-gray-300"></i>
-                        </div>
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-primary">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-primary fw-bold stat-number">@Model.TotalReports</div>
+                        <div class="text-muted">Total Reports</div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Verified Reports</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(r => r.Status == ReportStatus.Verified)</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Under Review</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(r => r.Status == ReportStatus.UnderReview)</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-search fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">High Priority</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(r => r.Priority == ReportPriority.High || r.Priority == ReportPriority.Critical)</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
-                        </div>
+                    <div class="col-auto">
+                        <i class="fas fa-flag stat-icon text-primary"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Reports Table -->
-    <div class="card shadow mb-4">
-        <div class="card-header bg-white py-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Recent Reports</h6>
-                <a asp-action="PendingReports" class="btn btn-primary btn-sm">
-                    <i class="fas fa-list me-1"></i>View Pending Reports
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-warning">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-warning fw-bold stat-number">@Model.PendingReports</div>
+                        <div class="text-muted">Pending Verification</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock stat-icon text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-success">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-success fw-bold stat-number">@Model.VerifiedReports</div>
+                        <div class="text-muted">Verified Reports</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle stat-icon text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-danger">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-danger fw-bold stat-number">@Model.HighPriorityReports</div>
+                        <div class="text-muted">High Priority</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation-triangle stat-icon text-danger"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Stats -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-info">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-info fw-bold stat-number">@Model.ReportsToday</div>
+                        <div class="text-muted">Today's Reports</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar-day stat-icon text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-secondary">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-secondary fw-bold stat-number">@Model.ReportsWithMedia</div>
+                        <div class="text-muted">With Evidence</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-paperclip stat-icon text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-dark">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-dark fw-bold stat-number">@Model.TotalMediaFiles</div>
+                        <div class="text-muted">Media Files</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-photo-video stat-icon text-dark"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-warning">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-warning fw-bold stat-number">@Model.RejectedReports</div>
+                        <div class="text-muted">Rejected Reports</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-times-circle stat-icon text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Reports -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>Recent Reports
+                </h5>
+                <a asp-action="AllReports" class="btn btn-sm btn-outline-primary">
+                    View All
                 </a>
             </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="reportsTable" width="100%" cellspacing="0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Report Code</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Created</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var report in Model.OrderByDescending(r => r.CreatedAt).Take(20))
-                        {
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <td>
-                                    <code>@report.ReportCode</code>
-                                </td>
-                                <td>
-                                    <div class="fw-semibold">@report.Title</div>
-                                    <small class="text-muted">@report.Location</small>
-                                </td>
-                                <td>@report.Category</td>
-                                <td>
-                                    <span class="badge @report.StatusBadgeClass">@report.Status</span>
-                                </td>
-                                <td>
-                                    <span class="badge @report.PriorityBadgeClass">@report.Priority</span>
-                                </td>
-                                <td>
-                                    <small>@report.TimeAgo</small>
-                                </td>
-                                <td>
-                                    <a asp-action="ReportDetails" asp-route-id="@report.Id" class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-eye"></i> View
-                                    </a>
-                                </td>
+                                <th>Code</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var report in Model.RecentReports)
+                            {
+                                <tr>
+                                    <td><code>@report.ReportCode</code></td>
+                                    <td>
+                                        <div class="fw-semibold text-truncate" style="max-width: 200px;" title="@report.Title">
+                                            @report.Title
+                                        </div>
+                                        <small class="text-muted">@report.Location</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark">@report.Category</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @report.StatusBadgeClass">@report.Status</span>
+                                        @if (report.Priority == ReportPriority.High || report.Priority == ReportPriority.Critical)
+                                        {
+                                            <span class="badge bg-danger ms-1">@report.Priority</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <small>@report.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                        <br>
+                                        <small class="text-muted">@report.CreatedAt.ToString("hh:mm tt")</small>
+                                    </td>
+                                    <td>
+                                        <a asp-action="ReportDetails" asp-route-id="@report.Id"
+                                           class="btn btn-sm btn-outline-primary" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats & Alerts -->
+    <div class="col-lg-4">
+        <!-- High Priority Alerts -->
+        <div class="card mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>High Priority Alerts
+                    <span class="badge bg-dark float-end">@Model.HighPriorityAlerts.Count</span>
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (Model.HighPriorityAlerts.Any())
+                {
+                    foreach (var alert in Model.HighPriorityAlerts)
+                    {
+                        <div class="alert alert-warning alert-dismissible fade show mb-2 p-3" role="alert">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <strong class="d-block">@alert.Title</strong>
+                                    <small class="d-block text-dark">@alert.ReportCode • @alert.Location</small>
+                                    <small class="d-block text-muted mt-1">@alert.CreatedAt.ToString("MMM dd, hh:mm tt")</small>
+                                </div>
+                                <a asp-action="ReportDetails" asp-route-id="@alert.Id"
+                                   class="btn btn-sm btn-outline-dark ms-2">
+                                    Review
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center text-muted py-3">
+                        <i class="fas fa-check-circle fa-2x mb-2 text-success"></i>
+                        <p>No high priority alerts</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Top Categories -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>Top Categories
+                </h5>
+            </div>
+            <div class="card-body">
+                @foreach (var category in Model.TopCategories)
+                {
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
+                        <div>
+                            <span class="fw-semibold">@category.Category</span>
+                            <br>
+                            <small class="text-muted">
+                                @category.VerifiedCount of @category.Count verified
+                                (@category.VerificationRate.ToString("0.0")%)
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-primary fs-6">@category.Count</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="PendingReports" class="btn btn-warning btn-sm">
+                        <i class="fas fa-clock me-1"></i>Review Pending Reports
+                    </a>
+                    <a asp-action="Analytics" class="btn btn-info btn-sm">
+                        <i class="fas fa-chart-bar me-1"></i>View Analytics
+                    </a>
+                    <a asp-controller="Report" asp-action="Create" class="btn btn-secondary btn-sm" target="_blank">
+                        <i class="fas fa-plus me-1"></i>Test Report Submission
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -139,16 +307,20 @@
 
 @section Scripts {
     <script>
-        // Initialize DataTables
-        $(document).ready(function() {
-            $('#reportsTable').DataTable({
+        $(document).ready(function () {
+            $('.table').DataTable({
                 pageLength: 10,
-                order: [[5, 'desc']],
+                order: [[4, 'desc']],
                 language: {
                     search: "Search reports:",
                     lengthMenu: "Show _MENU_ reports"
                 }
             });
+
+            // Auto-refresh dashboard every 2 minutes
+            setInterval(function () {
+                window.location.reload();
+            }, 120000);
         });
     </script>
 }
