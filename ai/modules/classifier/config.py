@@ -1,12 +1,14 @@
-
 SUSPICIOUS_OBJECTS = {"handbag", "bag", "box", "envelope", "wallet", "package", "bottle"}
+
+DANGEROUS_OBJECTS = {"gun", "knife", "fire", "smoke", "pistol", "rifle", "scissor", "blade"}
+
 
 CROWD_PERSON_COUNT = 5
 
 # OCR keywords
 POLITICAL_KEYWORDS = {
     "vote", "voting", "candidate", "party", "election", "support", "vote for",
-    "votefor", "vote_for", "मत", "छापा", "समर्थन", "उपहार", "निःशुल्क", "सहयोग"
+    "votefor", "vote_for", "मत", "छापा", "समर्थन", "उपहार", "निःशुल्क", "सहयोग", "free", "masubhat", "petrol"
 }
 
 # Bribery-related keywords

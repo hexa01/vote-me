@@ -2,13 +2,6 @@ from typing import Dict, Any, List
 from . import config
 
 def _normalize_detect(detect_results: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Convert various detector output shapes into a standard dict:
-    {
-      "objects": [ {"name": "person", "confidence": 0.9}, ... ],
-      "counts": {"person": 5, "handbag": 1, ...}
-    }
-    """
     out = {"objects": [], "counts": {}}
     if not detect_results:
         return out
@@ -60,15 +53,7 @@ def _contains_keyword(text: str, keywords: set) -> List[str]:
             found.append(kw)
     return found
 
-
 def classify(detect_results: Dict[str, Any], ocr_text: str = "") -> Dict[str, Any]:
-    """
-    Input:
-      - detect_results: dict returned by detect_image(...)
-      - ocr_text: extracted text (string) for that frame/image
-    Output:
-      - dict with keys: ai_tags (list), risk_score (0-100 int), summary (string), reasons (list)
-    """
     norm = _normalize_detect(detect_results)
     counts = norm["counts"]
     objects = norm["objects"]
@@ -78,55 +63,70 @@ def classify(detect_results: Dict[str, Any], ocr_text: str = "") -> Dict[str, An
 
     person_count = counts.get("person", 0)
 
-    # crowd presence
+    # Initial flags
+    dangerous_found = False
+    dangerous_objects_detected = []
+    suspicious_found = False
+
+    # DETECT DANGEROUS OBJECTS
+    for obj_name in counts.keys():
+        # Guns, knives, fire, smoke etc.
+        if obj_name in config.DANGEROUS_OBJECTS:
+            dangerous_found = True
+            dangerous_objects_detected.append(obj_name)
+            tags.append("dangerous_object_present")
+            reasons.append(f"Dangerous object detected: {obj_name} ({counts[obj_name]})")
+            score += 20  # heavy weight
+
+        # Suspicious objects (your older list)
+        if obj_name in config.SUSPICIOUS_OBJECTS:
+            suspicious_found = True
+            tags.append("suspicious_object_present")
+            reasons.append(f"Suspicious object detected: {obj_name} ({counts[obj_name]})")
+            score += config.WEIGHTS.get("suspicious_object", 0)
+
+    # CROWD DETECTION
     if person_count >= config.CROWD_PERSON_COUNT:
         tags.append("crowd_present")
         reasons.append(f"Large crowd detected ({person_count} people)")
         score += config.WEIGHTS.get("crowd", 0)
 
-    # suspicious object
-    suspicious_found = False
-    for obj_name in counts.keys():
-        if obj_name in config.SUSPICIOUS_OBJECTS:
-            suspicious_found = True
-            tags.append("suspicious_object_present")
-            reasons.append(f"Detected suspicious object: {obj_name} ({counts[obj_name]})")
-            score += config.WEIGHTS.get("suspicious_object", 0)
-            break
+    # 1 PERSON + WEAPON/FIRE = HIGH RISK
+    if person_count >= 1 and dangerous_found:
+        tags.append("person_with_weapon_or_fire")
+        reasons.append(
+            f"{person_count} person(s) present with dangerous items: {', '.join(dangerous_objects_detected)}"
+        )
+        score += 25
 
-    # political text present in OCR
+    # CROWD + DANGEROUS OBJECT
+    if person_count >= config.CROWD_PERSON_COUNT and (dangerous_found or suspicious_found):
+        tags.append("crowd_with_danger")
+        reasons.append("Crowd present with dangerous or suspicious items")
+        score += 10
+
+    # POLITICAL TEXT
     political_hits = _contains_keyword(ocr_text, config.POLITICAL_KEYWORDS)
     if political_hits:
         tags.append("political_text_present")
         reasons.append(f"Political keywords found: {', '.join(political_hits[:5])}")
         score += config.WEIGHTS.get("party_text", 0)
 
-    # bribery-related text
+    # BRIBERY TEXT
     bribery_hits = _contains_keyword(ocr_text, config.BRIBERY_KEYWORDS)
     if bribery_hits:
         tags.append("bribery_text_present")
         reasons.append(f"Bribery keywords found: {', '.join(bribery_hits[:5])}")
         score += config.WEIGHTS.get("bribery_text", 0)
 
-    # escalate if crowd and sus objets
-    if person_count >= config.CROWD_PERSON_COUNT and suspicious_found:
-        tags.append("crowd_with_object")
-        reasons.append("Crowd present while suspicious object detected (possible exchange)")
-        score += 10 #boost
+    # FINAL SCORING
+    score = int(min(score, config.MAX_RISK))
 
-    # normalization
-    score = min(score, config.MAX_RISK)
-    score = int(round(score))
-
-    # tags create
-    if tags:
-        summary = "; ".join(tags)
-    else:
-        summary = "no_suspicious_activity_detected"
+    summary = "; ".join(tags) if tags else "no_suspicious_activity_detected"
 
     return {
         "ai_tags": tags,
-        "risk_scoore": score,
+        "risk_score": score,
         "summary": summary,
         "reasons": reasons,
         "counts": counts,
