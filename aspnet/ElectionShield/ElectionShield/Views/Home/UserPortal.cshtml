@@ -1,0 +1,27 @@
+@using ElectionShield.ViewModels
+@model List<ReportViewModel>
+
+
+<html>
+<head>
+
+</head>
+
+<body>
+    <div class="d-flex justify-content-center">
+        <h2>Your small contribution <br />      can make a <br /> BIG Difference </h2>
+    </div>
+    <br />
+    <div class="d-flex justify-content-center">
+        <a href="/Report/Create" class="btn btn-primary">Upload evidence</a>
+    </div>
+    <br />
+    <div class="d-flex justify-content-center">
+        @for(int i = 0; i < Model.Count; i++){
+            @for(int j = 0; i < Model[i].MediaFiles.Count; j++){
+                <p>@Model[i].MediaFiles[j].FilePath</p>
+            }
+        }
+    </div>
+</body>
+</html>

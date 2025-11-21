@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ElectionShield.Services;
 using ElectionShield.ViewModels;
-<<<<<<< HEAD
 using System.Threading.Tasks;
-=======
 using ElectionShield.Data;
 using ElectionShield.Models;
->>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
 
 namespace ElectionShield.Controllers
 {
@@ -93,7 +90,6 @@ namespace ElectionShield.Controllers
             return View(model);
         }
 
-<<<<<<< HEAD
         [HttpGet]
 
         public async Task<IActionResult> GetAllReports(int id)
@@ -107,7 +103,6 @@ namespace ElectionShield.Controllers
             var reports = await _reportService.GetAllReportsAsync();
             return Ok(reports);
         }
-=======
 
         [HttpPost]
         public async Task<IActionResult> UploadReport()
@@ -136,7 +131,5 @@ namespace ElectionShield.Controllers
             }
             return Json(new { success = false });
         }
-
->>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
     }
 }

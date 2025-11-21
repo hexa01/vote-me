@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">
+                        <button type="submit" class="btn btn-primary btn-lg submitBtn">
                             <i class="fas fa-search me-2"></i>Track Report
                         </button>
                     </div>
@@ -46,8 +46,16 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        document.getElementById('ReportCode').addEventListener('input', function (e) {
-            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        $(document).ready(function(){
+            const params = new URLSearchParams(window.location.search);
+            const reportCode = params.get('reportCode');
+            if(reportCode != null){
+                $("#ReportCode").val(reportCode);
+                $(".submitBtn").click();
+            }
         });
+        @* document.getElementById('ReportCode').addEventListener('input', function (e) {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        }); *@
     </script>
 }

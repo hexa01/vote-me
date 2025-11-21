@@ -8,11 +8,13 @@ namespace ElectionShield.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IReportService _reportService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IReportService reportService)
         {
             _logger = logger;
+            _reportService = reportService;
         }
 
         public IActionResult Index()
@@ -29,6 +31,13 @@ namespace ElectionShield.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UserPortal()
+        {
+            var reports = await _reportService.GetAllReportsAsync();
+            return View(reports);
         }
     }
 }
