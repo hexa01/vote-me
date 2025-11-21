@@ -144,6 +144,27 @@ $(document).ready(async function () {
 
     let latLong = await getIncidents();
     addReportMarkers(latLong);
+    getLocation();
+
+    function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else {
+    console.error("Location access denied");
+  }
+}
+
+function success(position) {
+  @* x.innerHTML = "Latitude: " + position.coords.latitude +
+  "<br>Longitude: " + position.coords.longitude; *@
+
+    $("#latitude").val(position.coords.latitude);
+    $("#longitude").val(position.coords.longitude);
+}
+
+function error() {
+  console.log("Can't detect location");
+}
     debugger;
 });
 
