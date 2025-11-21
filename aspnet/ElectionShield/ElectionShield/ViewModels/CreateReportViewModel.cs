@@ -47,5 +47,7 @@ namespace ElectionShield.ViewModels
 
         [Display(Name = "I confirm that this report is accurate to the best of my knowledge")]
         public bool Confirmation { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

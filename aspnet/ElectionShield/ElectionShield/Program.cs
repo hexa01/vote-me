@@ -40,6 +40,12 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddHttpClient<AiService>();
+builder.Services.AddSession(options =>
+{
+   options.Cookie.HttpOnly = true;
+   options.Cookie.IsEssential = true;
+   options.IdleTimeout = TimeSpan.FromMinutes(60); 
+});
 
 
 // Configure application cookie
@@ -72,6 +78,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

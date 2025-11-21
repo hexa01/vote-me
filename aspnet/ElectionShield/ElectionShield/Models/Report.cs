@@ -50,6 +50,8 @@ namespace ElectionShield.Models
         public virtual AdminVerification? Verification { get; set; }
         public virtual AIAnalysis? AIAnalysis { get; set; }
         public string? AiAnalysisResult { get; set; }
+
+        public string? CreatedBy {get; set;}
     }
 
     public enum ReportStatus

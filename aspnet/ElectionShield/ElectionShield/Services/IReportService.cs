@@ -64,7 +64,8 @@ namespace ElectionShield.Services
                     ReportCode = await GenerateReportCodeAsync(),
                     Status = ReportStatus.Pending,
                     Priority = ReportPriority.Medium,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = model.CreatedBy
                 };
 
                 _context.Reports.Add(report);

@@ -39,7 +39,7 @@ namespace ElectionShield.Controllers
 
             try
             {
-
+                model.CreatedBy = HttpContext.Session.GetString("UserID");
                 var report = await _reportService.CreateReportAsync(model);
                 TempData["SuccessMessage"] = $"Report submitted successfully! Your tracking code is: {report.ReportCode}";
                 return RedirectToAction("Success", new { code = report.ReportCode });

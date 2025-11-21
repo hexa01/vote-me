@@ -1,0 +1,232 @@
+﻿@using ElectionShield.ViewModels
+@model AnalyticsViewModel
+@{
+    ViewData["Title"] = "Analytics Dashboard";
+    Layout = "_AdminLayout";
+    ViewBag.ActiveSection = Model.ActiveSection;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="fas fa-chart-bar text-primary me-2"></i>
+        Analytics Dashboard
+    </h1>
+</div>
+
+<div class="row">
+    <!-- Category Distribution -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>Category Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Distribution -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Status Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="statusChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Reports -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-line me-2"></i>Daily Reports (Last 30 Days)
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="dailyChart" height="150"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Priority Distribution -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Priority Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="priorityChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Performance -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-tachometer-alt me-2"></i>Category Performance
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Total Reports</th>
+                                <th>Verified</th>
+                                <th>Verification Rate</th>
+                                <th>Success Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Model.CategoryDistribution)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@category.Category</td>
+                                    <td>
+                                        <span class="badge bg-primary">@category.Count</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">@category.VerifiedCount</span>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar bg-success"
+                                                 style="width: @category.VerificationRate%">
+                                                @category.VerificationRate.ToString("0.0")%
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var successRate = category.Count > 0 ?
+                                            (double)category.VerifiedCount / category.Count * 100 : 0;
+                                        }
+                                        <span class="badge @(successRate >= 50 ? "bg-success" : "bg-warning")">
+                                            @successRate.ToString("0.0")%
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Category Chart
+            var categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            var categoryChart = new Chart(categoryCtx, {
+                type: 'pie',
+                data: {
+                    labels: [@Html.Raw(string.Join(", ", Model.CategoryDistribution.Select(c => $"'{c.Category}'")))],
+                    datasets: [{
+                        data: [@string.Join(", ", Model.CategoryDistribution.Select(c => c.Count))],
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                            '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+
+            // Status Chart
+            var statusCtx = document.getElementById('statusChart').getContext('2d');
+            var statusChart = new Chart(statusCtx, {
+                type: 'bar',
+                data: {
+                    labels: [@Html.Raw(string.Join(", ", Model.StatusDistribution.Select(s => $"'{s.Status}'")))],
+                    datasets: [{
+                        label: 'Reports',
+                        data: [@string.Join(", ", Model.StatusDistribution.Select(s => s.Count))],
+                        backgroundColor: [
+                            '#6c757d', '#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Daily Chart
+            var dailyCtx = document.getElementById('dailyChart').getContext('2d');
+            var dailyChart = new Chart(dailyCtx, {
+                type: 'line',
+                data: {
+                    labels: [@Html.Raw(string.Join(", ", Model.DailyReports.Select(d => $"'{d.Date.ToString("MMM dd")}'")))],
+                    datasets: [{
+                        label: 'Reports per Day',
+                        data: [@string.Join(", ", Model.DailyReports.Select(d => d.Count))],
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Priority Chart
+            var priorityCtx = document.getElementById('priorityChart').getContext('2d');
+            var priorityChart = new Chart(priorityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [@Html.Raw(string.Join(", ", Model.PriorityDistribution.Select(p => $"'{p.Priority}'")))],
+                    datasets: [{
+                        data: [@string.Join(", ", Model.PriorityDistribution.Select(p => p.Count))],
+                        backgroundColor: [
+                            '#198754', '#ffc107', '#fd7e14', '#dc3545'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

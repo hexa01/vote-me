@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ElectionShield.Models;
 using System.ComponentModel.DataAnnotations;
+using Serilog;
 
 namespace ElectionShield.Controllers
 {
@@ -29,6 +30,7 @@ namespace ElectionShield.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model, string? returnUrl = null)
         {
+            
             ViewData["ReturnUrl"] = returnUrl;
 
             if (ModelState.IsValid)
@@ -36,6 +38,10 @@ namespace ElectionShield.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    PasswordHasher<LoginModel> hasher = new PasswordHasher<LoginModel>();
+                    string hashEmail = hasher.HashPassword(new LoginModel(), model.Email);
+                    ViewData["userID"] = hashEmail;
+                    HttpContext.Session.SetString("UserID", hashEmail);
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -83,5 +89,7 @@ namespace ElectionShield.Controllers
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public int Id {get; set;}
     }
 }
