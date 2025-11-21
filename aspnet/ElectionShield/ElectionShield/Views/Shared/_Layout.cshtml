@@ -98,5 +98,13 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function(){
+            $(".logoutBtn").on("click", function(){
+                localStorage.removeItem("userId");
+            });
+        });
+    </script>
 </body>
 </html>

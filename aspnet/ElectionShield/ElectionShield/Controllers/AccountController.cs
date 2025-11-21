@@ -40,9 +40,9 @@ namespace ElectionShield.Controllers
                 {
                     PasswordHasher<LoginModel> hasher = new PasswordHasher<LoginModel>();
                     string hashEmail = hasher.HashPassword(new LoginModel(), model.Email);
-                    ViewData["userID"] = hashEmail;
                     HttpContext.Session.SetString("UserID", hashEmail);
                     _logger.LogInformation("User logged in.");
+
                     return RedirectToLocal(returnUrl);
                 }
                 else

@@ -30,7 +30,7 @@ namespace ElectionShield.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateReportViewModel model)
+        public async Task<IActionResult> Create(CreateReportViewModel model, string createdBy)
         {
             if (!ModelState.IsValid)
             {

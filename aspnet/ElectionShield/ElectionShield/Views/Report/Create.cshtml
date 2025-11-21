@@ -110,6 +110,8 @@
                         </label>
                         <div class="form-text">Your personal information will not be stored if you choose to remain anonymous.</div>
                     </div>
+
+                    <input type = "text" class="uid" name="createdBy" hidden />
                     
                     <div class="form-check mb-4">
                         <input asp-for="Confirmation" class="form-check-input" required />
@@ -141,6 +143,14 @@
     <script>
 
 $(document).ready(async function () {
+
+    if(!localStorage.getItem("userId")){
+        alert("Log in to report Incident");
+        window.location.href = "/Home/Index";
+    }
+    else{
+        $(".uid").val(localStorage.getItem("userId"));
+    }
 
     let latLong = await getIncidents();
     addReportMarkers(latLong);
