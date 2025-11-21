@@ -25,7 +25,7 @@ async def analyze(file: UploadFile = File(...)):
 
         response = {
             "ai_tags":classified_results.get('ai_tags'),
-            "risk_scoore":classified_results.get('risk_score'),
+            "risk_score":classified_results.get('risk_score'),
             "summary": classified_results.get('summary'),
             "objects": detect_results,
             "ocr": ocr_results
