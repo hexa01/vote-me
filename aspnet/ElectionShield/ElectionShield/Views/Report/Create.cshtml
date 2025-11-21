@@ -197,11 +197,30 @@ function addReportMarkers(reports) {
         shadowSize: [41, 41]
     });
 
+        var yellowIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    var greenIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
     reports.forEach(r => {
         debugger;
         if (r.latitude && r.longitude) {
 
-            L.marker([r.latitude, r.longitude], { icon: redIcon })
+            if(r.status === 2){
+            L.marker([r.latitude, r.longitude], { icon: greenIcon })
                 .addTo(map)
                 .bindPopup(`
                     <b>${r.title}</b><br/>
@@ -209,6 +228,7 @@ function addReportMarkers(reports) {
                     <span class="text-muted">${r.category}</span>
                     <a href = "/Report/Track?reportCode=${r.reportCode}">View Report</a>
                 `);
+            }
         }
     });
 }
