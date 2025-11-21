@@ -59,10 +59,23 @@ def process_video(video_path, flag_model, person_model, classifier):
     # detection  test for test
     detections_lite = frame_results[:10]
 
+    summary_text = " | ".join(list(tags))
+
+    tag_counts = {}
+    for c in classification_all:
+        for t in c.get("ai_tags", []):
+            tag_counts[t] = tag_counts.get(t, 0) + 1
+
+    reasons = [f"Detected '{t}' in multiple frames" for t in tags]
+
     return {
         "risk_score": round(avg_score, 2),
-        "tags": list(tags),
-        "frames_analyzed": len(classification_all),
-        "ocr_combined_text": ocr_combined,
+        "ai_tags": list(tags),
+        "summary": summary_text,
+        "reasons": reasons,
+        "tag_counts": tag_counts,
+        "ocr_text": ocr_combined,
         "detections": detections_lite,
+        "frames_analyzed": len(classification_all),
     }
+
