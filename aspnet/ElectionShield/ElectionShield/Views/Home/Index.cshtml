@@ -93,3 +93,20 @@
         transition: transform 0.3s ease;
     }
 </style>
+@section Scripts{
+<script>
+$(document).ready(function(){
+if(localStorage.getItem("userId") === "loggedOut"){
+localStorage.removeItem("userId");
+}
+else{
+        var userId = "@Context.Session.GetString("UserID")";
+    debugger;
+    if(userId != null){
+        localStorage.setItem("userId", userId);
+    }
+}
+});
+
+</script>
+}

@@ -4,3 +4,6 @@
 *.suo
 *.userosscache
 *.sln.docstates
+
+/bin
+/obj

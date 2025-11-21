@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ElectionShield.Services;
 using ElectionShield.ViewModels;
+using System.Threading.Tasks;
 using ElectionShield.Data;
 using ElectionShield.Models;
 
@@ -18,7 +19,7 @@ namespace ElectionShield.Controllers
             _reportService = reportService;
             _logger = logger;
             _context = context;
-            _aiService = new AiService();
+            //_aiService = new AiService();
         }
 
         [HttpGet]
@@ -29,7 +30,7 @@ namespace ElectionShield.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateReportViewModel model)
+        public async Task<IActionResult> Create(CreateReportViewModel model, string createdBy)
         {
             if (!ModelState.IsValid)
             {
@@ -38,6 +39,7 @@ namespace ElectionShield.Controllers
 
             try
             {
+                model.CreatedBy = HttpContext.Session.GetString("UserID");
                 var report = await _reportService.CreateReportAsync(model);
                 TempData["SuccessMessage"] = $"Report submitted successfully! Your tracking code is: {report.ReportCode}";
                 return RedirectToAction("Success", new { code = report.ReportCode });
@@ -89,26 +91,48 @@ namespace ElectionShield.Controllers
             return View(model);
         }
 
+        [HttpGet]
+
+        public async Task<IActionResult> GetAllReports(int id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllReports()
+        {
+            var reports = await _reportService.GetAllReportsAsync();
+            return Ok(reports);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetVerifiedReports(int id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> GetVerifiedReports()
+        {
+            var reports = await _reportService.GetVerifiedReportsAsync();
+            return Ok(reports);
+        }
 
         [HttpPost]
         public async Task<IActionResult> UploadReport()
         {
-            var file = Request.Form.Files[0];
-            if (file.Length > 0)
-            {
-                var filePath = Path.Combine("wwwroot/uploads", file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                // Call AI-service
+           var file = Request.Form.Files[0];
+           if (file.Length > 0)
+           {
+               var filePath = Path.Combine("wwwroot/uploads", file.FileName);
+               using (var stream = new FileStream(filePath, FileMode.Create))
+               {
+                   await file.CopyToAsync(stream);
+               }
                 var aiResultJson = await _aiService.AnalyzeFileAsync(filePath);
-
-                // Save to Reports table
                 var report = new Report
                 {
-                    //report data
                 };
                 _context.Reports.Add(report);
                 await _context.SaveChangesAsync();
@@ -117,6 +141,8 @@ namespace ElectionShield.Controllers
             }
             return Json(new { success = false });
         }
+
+
 
     }
 }

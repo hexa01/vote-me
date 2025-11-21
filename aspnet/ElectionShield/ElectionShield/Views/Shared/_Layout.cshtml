@@ -39,6 +39,11 @@
                                 <i class="fas fa-search me-1"></i>Track Report
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="UserPortal">
+                                <i class="fas fa-search me-1"></i>User Portal
+                            </a>
+                        </li>
                         @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
                         {
                             <li class="nav-item dropdown">

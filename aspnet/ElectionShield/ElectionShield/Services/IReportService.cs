@@ -1,7 +1,9 @@
 ﻿using ElectionShield.Data;
 using ElectionShield.Models;
 using ElectionShield.ViewModels;
+using MailKit;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
 
 namespace ElectionShield.Services
 {
@@ -10,6 +12,7 @@ namespace ElectionShield.Services
         Task<Report> CreateReportAsync(CreateReportViewModel model);
         Task<ReportViewModel?> GetReportByCodeAsync(string reportCode);
         Task<List<ReportViewModel>> GetAllReportsAsync();
+        Task<List<ReportViewModel>> GetVerifiedReportsAsync();
         Task<List<ReportViewModel>> GetPendingReportsAsync();
         Task<List<ReportViewModel>> GetReportsByStatusAsync(ReportStatus status);
         Task<bool> UpdateReportStatusAsync(Guid reportId, ReportStatus status);
@@ -23,15 +26,25 @@ namespace ElectionShield.Services
 
     public class ReportService : IReportService
     {
+        private readonly IWebHostEnvironment _environment;
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
+        private readonly AiService _aiService;
         private readonly ILogger<ReportService> _logger;
 
-        public ReportService(ApplicationDbContext context, IFileService fileService, ILogger<ReportService> logger)
+        public ReportService(
+     ApplicationDbContext context,
+     IFileService fileService,
+     ILogger<ReportService> logger,
+     AiService aiService,
+     IWebHostEnvironment environment
+ )
         {
             _context = context;
             _fileService = fileService;
             _logger = logger;
+            _aiService = aiService;
+            _environment = environment;
         }
 
         public async Task<Report> CreateReportAsync(CreateReportViewModel model)
@@ -52,13 +65,15 @@ namespace ElectionShield.Services
                     ReportCode = await GenerateReportCodeAsync(),
                     Status = ReportStatus.Pending,
                     Priority = ReportPriority.Medium,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = model.CreatedBy
                 };
 
                 _context.Reports.Add(report);
                 await _context.SaveChangesAsync();
 
-                // Save media files
+                string? firstSavedFilePath = null;
+
                 if (model.MediaFiles != null && model.MediaFiles.Any())
                 {
                     foreach (var file in model.MediaFiles)
@@ -68,6 +83,9 @@ namespace ElectionShield.Services
                             try
                             {
                                 var filePath = await _fileService.SaveFileAsync(file, "reports");
+                                if (firstSavedFilePath == null)
+                                    firstSavedFilePath = filePath;
+
                                 var mediaFile = new MediaFile
                                 {
                                     FileName = file.FileName,
@@ -84,10 +102,25 @@ namespace ElectionShield.Services
                             catch (Exception ex)
                             {
                                 _logger.LogError(ex, "Error saving media file for report {ReportId}", report.Id);
-                                // Continue with other files even if one fails
                             }
                         }
                     }
+
+                    await _context.SaveChangesAsync(); 
+                }
+
+                if (firstSavedFilePath != null)
+                {
+                    _logger.LogInformation("firstSavedFilePath: {Path}", firstSavedFilePath);
+                    // _logger.LogInformation("_aiService is null? {Value}", _aiService == null);
+                    _logger.LogInformation("_fileService is null? {Value}", _fileService == null);
+                    _logger.LogInformation("_context is null? {Value}", _context == null);
+
+                    var absoluteFilePath = Path.Combine(_environment.WebRootPath, firstSavedFilePath);
+
+                    // var analysis = await _aiService.AnalyzeFileAsync(absoluteFilePath);
+
+                    // report.AiAnalysisResult = analysis;
                     await _context.SaveChangesAsync();
                 }
 
@@ -100,6 +133,13 @@ namespace ElectionShield.Services
                 throw;
             }
         }
+
+        private string ToAbsolutePath(string relativePath)
+        {
+            return Path.Combine(_environment.WebRootPath, relativePath.Replace("/", "\\"));
+        }
+
+
 
         public async Task<ReportViewModel?> GetReportByCodeAsync(string reportCode)
         {
@@ -136,7 +176,7 @@ namespace ElectionShield.Services
                     .Include(r => r.MediaFiles)
                     .Include(r => r.Verification)
                     .ThenInclude(v => v.AdminUser)
-                    .Include(r => r.AIAnalysis)
+                    // .Include(r => r.AIAnalysis)
                     .OrderByDescending(r => r.CreatedAt)
                     .ToListAsync();
 
@@ -148,6 +188,29 @@ namespace ElectionShield.Services
                 throw;
             }
         }
+
+        public async Task<List<ReportViewModel>> GetVerifiedReportsAsync()
+        {
+            try
+            {
+                var reports = await _context.Reports
+                    .Include(r => r.MediaFiles)
+                    .Include(r => r.Verification)
+                    .ThenInclude(v => v.AdminUser)
+                    // .Include(r => r.AIAnalysis)
+                    .OrderByDescending(r => r.CreatedAt)
+                    .Where(r => r.Verification.Status.ToString() == "Verified")
+                    .ToListAsync();
+
+                return reports.Select(MapToViewModel).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all reports");
+                throw;
+            }
+        }
+
 
         public async Task<List<ReportViewModel>> GetPendingReportsAsync()
         {

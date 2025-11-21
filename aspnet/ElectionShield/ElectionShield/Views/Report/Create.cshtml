@@ -76,7 +76,7 @@
                         <label class="form-label fw-semibold">Upload Evidence</label>
                         <div class="file-upload-area border rounded p-4 text-center">
                             <input type="file" asp-for="MediaFiles" class="form-control" multiple
-                                   accept="image/*,video/*,.pdf,.doc,.docx,.txt" id="fileInput" />
+                                   accept="image/*,video/*,.pdf,.doc,.docx,.txt" id="fileInput" required/>
                             <div class="mt-2">
                                 <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
                                 <p class="text-muted mb-1">Drag & drop files here or click to browse</p>
@@ -111,6 +111,8 @@
                         <div class="form-text">Your personal information will not be stored if you choose to remain anonymous.</div>
                     </div>
 
+                    <input type = "text" class="uid" name="createdBy" hidden />
+                    
                     <div class="form-check mb-4">
                         <input asp-for="Confirmation" class="form-check-input" required />
                         <label asp-for="Confirmation" class="form-check-label fw-semibold">
@@ -136,9 +138,82 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+
     <script>
+
+$(document).ready(async function () {
+
+    if(!localStorage.getItem("userId")){
+        alert("Log in to report Incident");
+        window.location.href = "/Home/Index";
+    }
+    else{
+        $(".uid").val(localStorage.getItem("userId"));
+    }
+
+    let latLong = await getIncidents();
+    addReportMarkers(latLong);
+    getLocation();
+
+    function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else {
+    console.error("Location access denied");
+  }
+}
+
+function success(position) {
+  @* x.innerHTML = "Latitude: " + position.coords.latitude +
+  "<br>Longitude: " + position.coords.longitude; *@
+
+    $("#latitude").val(position.coords.latitude);
+    $("#longitude").val(position.coords.longitude);
+}
+
+function error() {
+  console.log("Can't detect location");
+}
+    debugger;
+});
+
+function getIncidents() {
+    return $.ajax({
+        url: "/Report/GetAllReports",
+        type: "POST"
+    });
+}
+
+function addReportMarkers(reports) {
+
+    // Use a red marker icon
+    var redIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    reports.forEach(r => {
+        debugger;
+        if (r.latitude && r.longitude) {
+
+            L.marker([r.latitude, r.longitude], { icon: redIcon })
+                .addTo(map)
+                .bindPopup(`
+                    <b>${r.title}</b><br/>
+                    ${r.location}<br/>
+                    <span class="text-muted">${r.category}</span>
+                    <a href = "/Report/Track?reportCode=${r.reportCode}">View Report</a>
+                `);
+        }
+    });
+}
         // Initialize map
-        var map = L.map('map').setView([20.5937, 78.9629], 5);
+        var map = L.map('map').setView([28.175655, 83.965759], 7);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
@@ -147,9 +222,8 @@
         var latitudeInput = document.getElementById('latitude');
         var longitudeInput = document.getElementById('longitude');
 
-        // Set initial coordinates (India center)
-        latitudeInput.value = '20.5937';
-        longitudeInput.value = '78.9629';
+        latitudeInput.value = '28.175655';
+        longitudeInput.value = '83.965759';
 
         map.on('click', function (e) {
             if (marker) {
