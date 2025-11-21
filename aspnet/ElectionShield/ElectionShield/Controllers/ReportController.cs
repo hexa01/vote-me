@@ -105,19 +105,17 @@ namespace ElectionShield.Controllers
             return Ok(reports);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> UploadReport()
-        //{
-        //    var file = Request.Form.Files[0];
-        //    if (file.Length > 0)
-        //    {
-        //        var filePath = Path.Combine("wwwroot/uploads", file.FileName);
-        //        using (var stream = new FileStream(filePath, FileMode.Create))
-        //        {
-        //            await file.CopyToAsync(stream);
-        //        }
-
-<<<<<<< HEAD
+        [HttpPost]
+        public async Task<IActionResult> UploadReport()
+        {
+           var file = Request.Form.Files[0];
+           if (file.Length > 0)
+           {
+               var filePath = Path.Combine("wwwroot/uploads", file.FileName);
+               using (var stream = new FileStream(filePath, FileMode.Create))
+               {
+                   await file.CopyToAsync(stream);
+               }
                 // Call AI-service
                 var aiResultJson = await _aiService.AnalyzeFileAsync(filePath);
 
@@ -133,13 +131,6 @@ namespace ElectionShield.Controllers
             }
             return Json(new { success = false });
         }
-=======
-             
-        //    }
-        //    return Json(new { success = false });
-        //}
 
->>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
->>>>>>> 8216165e1283425a570b1d8af6314bc09036209c
     }
 }

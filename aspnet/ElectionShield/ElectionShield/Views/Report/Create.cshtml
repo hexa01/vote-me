@@ -76,7 +76,7 @@
                         <label class="form-label fw-semibold">Upload Evidence</label>
                         <div class="file-upload-area border rounded p-4 text-center">
                             <input type="file" asp-for="MediaFiles" class="form-control" multiple
-                                   accept="image/*,video/*,.pdf,.doc,.docx,.txt" id="fileInput" />
+                                   accept="image/*,video/*,.pdf,.doc,.docx,.txt" id="fileInput" required/>
                             <div class="mt-2">
                                 <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
                                 <p class="text-muted mb-1">Drag & drop files here or click to browse</p>
@@ -140,7 +140,6 @@
 
     <script>
 
-<<<<<<< HEAD
 $(document).ready(async function () {
 
     let latLong = await getIncidents();
@@ -184,22 +183,6 @@ function addReportMarkers(reports) {
 }
         // Initialize map
         var map = L.map('map').setView([28.175655, 83.965759], 7);
-=======
-        $("#MediaFiles").on("change", async function () {
-       var file = $(this).val();
-       var aireqest = json.strigfy{
-           (
-           )
-       }
-
-
-
-        });
-
-
-
-        var map = L.map('map').setView([20.5937, 78.9629], 5);
->>>>>>> 8216165e1283425a570b1d8af6314bc09036209c
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
