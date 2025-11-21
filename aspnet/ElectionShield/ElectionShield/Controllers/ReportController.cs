@@ -116,13 +116,9 @@ namespace ElectionShield.Controllers
                {
                    await file.CopyToAsync(stream);
                }
-                // Call AI-service
                 var aiResultJson = await _aiService.AnalyzeFileAsync(filePath);
-
-                // Save to Reports table
                 var report = new Report
                 {
-                    //report data
                 };
                 _context.Reports.Add(report);
                 await _context.SaveChangesAsync();
@@ -131,6 +127,8 @@ namespace ElectionShield.Controllers
             }
             return Json(new { success = false });
         }
+
+
 
     }
 }
