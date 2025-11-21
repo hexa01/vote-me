@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ElectionShield")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb55451064ee1dc6360500bb6d913f398dd10019")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b2c1b4ff748540f183bc809076f6733b09e826f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ElectionShield")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ElectionShield")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
