@@ -1,7 +1,7 @@
 ﻿@model ElectionShield.ViewModels.AdminDashboardViewModel
 @{
     ViewData["Title"] = "Admin Dashboard";
-    Layout = "_AdminLayout";
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
     ViewBag.ActiveSection = Model.ActiveSection;
     ViewBag.PendingCount = Model.PendingReports;
 }
@@ -149,7 +149,6 @@
 </div>
 
 <div class="row">
-    <!-- Recent Reports -->
     <div class="col-lg-8 mb-4">
         <div class="card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
@@ -214,9 +213,7 @@
         </div>
     </div>
 
-    <!-- Quick Stats & Alerts -->
     <div class="col-lg-4">
-        <!-- High Priority Alerts -->
         <div class="card mb-4">
             <div class="card-header bg-warning text-dark">
                 <h5 class="card-title mb-0">
@@ -253,8 +250,6 @@
                 }
             </div>
         </div>
-
-        <!-- Top Categories -->
         <div class="card mb-4">
             <div class="card-header bg-white">
                 <h5 class="card-title mb-0">
@@ -281,7 +276,6 @@
             </div>
         </div>
 
-        <!-- Quick Actions -->
         <div class="card">
             <div class="card-header bg-white">
                 <h5 class="card-title mb-0">
@@ -317,7 +311,6 @@
                 }
             });
 
-            // Auto-refresh dashboard every 2 minutes
             setInterval(function () {
                 window.location.reload();
             }, 120000);
