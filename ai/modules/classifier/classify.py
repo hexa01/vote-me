@@ -1,10 +1,3 @@
-# modules/classifier/classify.py
-"""
-Rules-based classifier that combines detector outputs + OCR text
-to produce tags, reasons, and a risk_score (0-100).
-Designed to be simple, explainable, and CPU-friendly.
-"""
-
 from typing import Dict, Any, List
 from . import config
 
@@ -115,7 +108,7 @@ def classify(detect_results: Dict[str, Any], ocr_text: str = "") -> Dict[str, An
         reasons.append(f"Bribery keywords found: {', '.join(bribery_hits[:5])}")
         score += config.WEIGHTS.get("bribery_text", 0)
 
-    # crowd + suspicious object => escalate
+    # escalate if crowd and sus objets
     if person_count >= config.CROWD_PERSON_COUNT and suspicious_found:
         tags.append("crowd_with_object")
         reasons.append("Crowd present while suspicious object detected (possible exchange)")
