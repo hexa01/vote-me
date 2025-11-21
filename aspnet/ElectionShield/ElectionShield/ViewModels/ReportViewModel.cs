@@ -32,6 +32,7 @@ namespace ElectionShield.ViewModels
             ReportStatus.Rejected => "bg-danger",
             ReportStatus.Resolved => "bg-primary",
             ReportStatus.Escalated => "bg-warning",
+            ReportStatus.RejectedByAI => "bg-danger",
             _ => "bg-secondary"
         };
 
@@ -117,6 +118,7 @@ namespace ElectionShield.ViewModels
             VerificationStatus.NeedsMoreInfo => "bg-warning",
             VerificationStatus.Escalated => "bg-info",
             VerificationStatus.Duplicate => "bg-dark",
+            VerificationStatus.RejectedByAI => "bg-danger",
             _ => "bg-secondary"
         };
 

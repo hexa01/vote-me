@@ -61,7 +61,9 @@ namespace ElectionShield.Models
         Verified,
         Rejected,
         Resolved,
-        Escalated
+        Escalated,
+
+        RejectedByAI
     }
 
     public enum ReportPriority
