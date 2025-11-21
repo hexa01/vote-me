@@ -153,28 +153,49 @@ namespace ElectionShield.Controllers
             {
                 var hotspots = await _context.Reports
                     .GroupBy(r => new { r.Latitude, r.Longitude, r.Location })
-                    .Select(g => new Hotspot
+                    .Select(g => new  
                     {
                         Latitude = g.Key.Latitude,
                         Longitude = g.Key.Longitude,
                         Location = g.Key.Location,
+
                         ReportCount = g.Count(),
                         VerifiedCount = g.Count(r => r.Status == ReportStatus.Verified),
-                        HighPriorityCount = g.Count(r => r.Priority == ReportPriority.High || r.Priority == ReportPriority.Critical),
+                        HighPriorityCount = g.Count(r => r.Priority == ReportPriority.High
+                                                      || r.Priority == ReportPriority.Critical),
+
                         LatestIncident = g.Max(r => r.CreatedAt),
-                        Categories = g.Select(r => r.Category).Distinct().ToList()
+
+                        Categories = g.Select(r => r.Category)
+                                      .Distinct()
+                                      .ToList(),
+
+                        RiskScore = g.Count() == 0 ? 0 :
+                            (
+                                g.Count(r => r.Priority == ReportPriority.Critical) * 1.0 +
+                                g.Count(r => r.Priority == ReportPriority.High) * 0.8 +
+                                g.Count(r => r.Priority == ReportPriority.Medium) * 0.5
+                            ) / g.Count()
                     })
-                    .Where(h => h.ReportCount >= 3) // Only show locations with 3+ incidents
-                    .OrderByDescending(h => h.ReportCount)
+                    .Where(h => h.ReportCount >= 3)
+                    .OrderByDescending(h => h.RiskScore)
                     .Take(20)
                     .ToListAsync();
 
-                return Ok(new { success = true, hotspots });
+                return Ok(new
+                {
+                    success = true,
+                    hotspots
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting incident hotspots");
-                return StatusCode(500, new { success = false, error = "Error loading hotspots" });
+                return StatusCode(500, new
+                {
+                    success = false,
+                    error = "Error loading hotspots"
+                });
             }
         }
 

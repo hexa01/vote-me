@@ -72,6 +72,7 @@ namespace ElectionShield.ViewModels
     {
         public DateTime Date { get; set; }
         public int Count { get; set; }
+        public int VerifiedCount { get; internal set; }
     }
 
     public class PriorityStat
