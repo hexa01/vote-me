@@ -40,6 +40,8 @@ builder.Services.AddRazorPages();
 // Register custom services
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddHttpClient<AiService>();
+
 
 // Configure application cookie
 builder.Services.ConfigureApplicationCookie(options =>

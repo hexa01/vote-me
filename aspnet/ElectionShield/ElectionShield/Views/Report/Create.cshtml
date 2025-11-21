@@ -140,6 +140,7 @@
 
     <script>
 
+<<<<<<< HEAD
 $(document).ready(async function () {
 
     let latLong = await getIncidents();
@@ -183,6 +184,22 @@ function addReportMarkers(reports) {
 }
         // Initialize map
         var map = L.map('map').setView([28.175655, 83.965759], 7);
+=======
+        $("#MediaFiles").on("change", async function () {
+       var file = $(this).val();
+       var aireqest = json.strigfy{
+           (
+           )
+       }
+
+
+
+        });
+
+
+
+        var map = L.map('map').setView([20.5937, 78.9629], 5);
+>>>>>>> 8216165e1283425a570b1d8af6314bc09036209c
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);

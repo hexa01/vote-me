@@ -1,24 +1,30 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
-
+ namespace ElectionShield.Services { 
 public class AiService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _aiUrl = "http://127.0.0.1:8000/analyze"; //port change
 
-    public AiService()
+    public AiService(HttpClient httpClient)
     {
-        _httpClient = new HttpClient();
+        _httpClient = httpClient;
     }
 
     public async Task<string> AnalyzeFileAsync(string filePath)
     {
-        using var content = new MultipartFormDataContent();
-        using var fileStream = File.OpenRead(filePath);
-        content.Add(new StreamContent(fileStream), "file", Path.GetFileName(filePath));
+        using var form = new MultipartFormDataContent();
+        using var stream = File.OpenRead(filePath);
 
-        var response = await _httpClient.PostAsync(_aiUrl, content);
+        form.Add(new StreamContent(stream), "file", Path.GetFileName(filePath));
+
+        var response = await _httpClient.PostAsync("http://192.168.88.183:8000/analyze", form);
+        response.EnsureSuccessStatusCode();
+
         return await response.Content.ReadAsStringAsync();
     }
+}
+
+
+
 }

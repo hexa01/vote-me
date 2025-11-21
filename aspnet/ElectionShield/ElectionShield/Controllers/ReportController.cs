@@ -19,7 +19,7 @@ namespace ElectionShield.Controllers
             _reportService = reportService;
             _logger = logger;
             _context = context;
-            _aiService = new AiService();
+            //_aiService = new AiService();
         }
 
         [HttpGet]
@@ -39,6 +39,7 @@ namespace ElectionShield.Controllers
 
             try
             {
+
                 var report = await _reportService.CreateReportAsync(model);
                 TempData["SuccessMessage"] = $"Report submitted successfully! Your tracking code is: {report.ReportCode}";
                 return RedirectToAction("Success", new { code = report.ReportCode });
@@ -104,18 +105,19 @@ namespace ElectionShield.Controllers
             return Ok(reports);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadReport()
-        {
-            var file = Request.Form.Files[0];
-            if (file.Length > 0)
-            {
-                var filePath = Path.Combine("wwwroot/uploads", file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
+        //[HttpPost]
+        //public async Task<IActionResult> UploadReport()
+        //{
+        //    var file = Request.Form.Files[0];
+        //    if (file.Length > 0)
+        //    {
+        //        var filePath = Path.Combine("wwwroot/uploads", file.FileName);
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await file.CopyToAsync(stream);
+        //        }
 
+<<<<<<< HEAD
                 // Call AI-service
                 var aiResultJson = await _aiService.AnalyzeFileAsync(filePath);
 
@@ -131,5 +133,13 @@ namespace ElectionShield.Controllers
             }
             return Json(new { success = false });
         }
+=======
+             
+        //    }
+        //    return Json(new { success = false });
+        //}
+
+>>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
+>>>>>>> 8216165e1283425a570b1d8af6314bc09036209c
     }
 }
