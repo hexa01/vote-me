@@ -1,0 +1,576 @@
+﻿@model HeatMapViewModel
+@{
+    ViewData["Title"] = "Incident Heat Map";
+    Layout = "_AdminLayout";
+    ViewBag.ActiveSection = Model.ActiveSection;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="fas fa-map-marked-alt text-primary me-2"></i>
+        Incident Heat Map
+    </h1>
+    <div class="text-muted">
+        Real-time incident visualization
+    </div>
+</div>
+
+<!-- Filters Card -->
+<div class="card mb-4">
+    <div class="card-header bg-white">
+        <h5 class="card-title mb-0">
+            <i class="fas fa-filter me-2"></i>Filter Incidents
+        </h5>
+    </div>
+    <div class="card-body">
+        <form id="filterForm" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Category</label>
+                <select name="category" class="form-select" id="categoryFilter">
+                    <option value="">All Categories</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select" id="statusFilter">
+                    <option value="">All Status</option>
+                    @foreach (var status in Model.Statuses)
+                    {
+                        <option value="@((int)status)">@status</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Priority</label>
+                <select name="priority" class="form-select" id="priorityFilter">
+                    <option value="">All Priorities</option>
+                    @foreach (var priority in Model.Priorities)
+                    {
+                        <option value="@((int)priority)">@priority</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Start Date</label>
+                <input type="date" name="startDate" class="form-control"
+                       value="@Model.DefaultStartDate.ToString("yyyy-MM-dd")" id="startDateFilter">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">End Date</label>
+                <input type="date" name="endDate" class="form-control"
+                       value="@Model.DefaultEndDate.ToString("yyyy-MM-dd")" id="endDateFilter">
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="button" class="btn btn-primary w-100" id="applyFilters">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Map Container -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-map me-2"></i>Incident Heat Map
+                </h5>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-primary active" data-map-type="heatmap">
+                        <i class="fas fa-fire"></i> Heat Map
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-map-type="clusters">
+                        <i class="fas fa-layer-group"></i> Clusters
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-info" data-map-type="points">
+                        <i class="fas fa-map-marker-alt"></i> Points
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div id="heatMap" style="height: 600px; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Sidebar -->
+    <div class="col-lg-4">
+        <!-- Summary Stats -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Map Summary
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="mapStats">
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-sync fa-spin fa-2x mb-2"></i>
+                        <p>Loading statistics...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incident Hotspots -->
+        <div class="card mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Incident Hotspots
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="hotspotsList">
+                    <div class="text-center text-muted py-3">
+                        <i class="fas fa-sync fa-spin mb-2"></i>
+                        <p>Loading hotspots...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Map Legend
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <div class="d-flex align-items-center mb-1">
+                        <div class="legend-color heat-high me-2" style="width: 20px; height: 20px;"></div>
+                        <small>High Intensity (Critical/High Priority)</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-1">
+                        <div class="legend-color heat-medium me-2" style="width: 20px; height: 20px;"></div>
+                        <small>Medium Intensity (Medium Priority)</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-1">
+                        <div class="legend-color heat-low me-2" style="width: 20px; height: 20px;"></div>
+                        <small>Low Intensity (Low Priority)</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="mb-2">
+                    <div class="d-flex align-items-center mb-1">
+                        <i class="fas fa-circle text-success me-2"></i>
+                        <small>Verified Reports</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-1">
+                        <i class="fas fa-circle text-warning me-2"></i>
+                        <small>Pending Reports</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-circle text-danger me-2"></i>
+                        <small>High Priority</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Incident Details Modal -->
+<div class="modal fade" id="incidentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Incident Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="incidentDetails">
+                <!-- Details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary" id="viewReportBtn">
+                    <i class="fas fa-external-link-alt me-1"></i>View Full Report
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+       
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.css" />
+    <style>
+        .legend-color {
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
+
+        .heat-high { background: linear-gradient(to right, #ff0000, #ff4400); }
+        .heat-medium { background: linear-gradient(to right, #ff4400, #ff8800); }
+        .heat-low { background: linear-gradient(to right, #ff8800, #ffcc00); }
+
+        .hotspot-item {
+            border-left: 4px solid #ffc107;
+            transition: all 0.3s;
+        }
+
+        .hotspot-item:hover {
+            background-color: #fff3cd;
+            transform: translateX(5px);
+        }
+
+        .risk-high { border-left-color: #dc3545 !important; }
+        .risk-medium { border-left-color: #fd7e14 !important; }
+        .risk-low { border-left-color: #ffc107 !important; }
+
+        #heatMap {
+            border-radius: 0 0 0.375rem 0.375rem;
+        }
+
+        .cluster-marker {
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script>
+        // Global variables
+        let map;
+        let heatLayer;
+        let markersLayer;
+        let clustersLayer;
+        let currentData = [];
+        let currentMapType = 'heatmap';
+
+        // Initialize map
+        function initMap() {
+            map = L.map('heatMap').setView([20.5937, 78.9629], 5); // Center on India
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            // Create layer groups
+            heatLayer = L.layerGroup().addTo(map);
+            markersLayer = L.layerGroup().addTo(map);
+            clustersLayer = L.layerGroup().addTo(map);
+
+            loadHeatMapData();
+            loadHotspots();
+        }
+
+        // Load heatmap data with filters
+        function loadHeatMapData(filters = {}) {
+            showLoading('mapStats');
+
+            $.get('/HeatMap/GetHeatMapData', filters)
+                .done(function(response) {
+                    if (response.success) {
+                        currentData = response.points;
+                        updateMap(response.points, response.clusters);
+                        updateStats(response.points, response.filteredBy);
+                    }
+                })
+                .fail(function() {
+                    showError('mapStats', 'Failed to load heatmap data');
+                });
+        }
+
+        // Update map based on current view type
+        function updateMap(points, clusters) {
+            // Clear existing layers
+            heatLayer.clearLayers();
+            markersLayer.clearLayers();
+            clustersLayer.clearLayers();
+
+            if (points.length === 0) {
+                // Show message for no data
+                L.marker([20.5937, 78.9629])
+                    .bindPopup('No incidents found for the selected filters')
+                    .addTo(markersLayer)
+                    .openPopup();
+                return;
+            }
+
+            switch (currentMapType) {
+                case 'heatmap':
+                    showHeatMap(points);
+                    break;
+                case 'clusters':
+                    showClusters(clusters);
+                    break;
+                case 'points':
+                    showPoints(points);
+                    break;
+            }
+
+            // Fit map to show all points
+            const group = new L.featureGroup(
+                points.map(p => L.marker([p.latitude, p.longitude]))
+            );
+            map.fitBounds(group.getBounds().pad(0.1));
+        }
+
+        // Show heatmap visualization
+        function showHeatMap(points) {
+            const heatPoints = points.map(p => [p.latitude, p.longitude, p.intensity * 10]);
+
+            heatLayer.addLayer(
+                L.heatLayer(heatPoints, {
+                    radius: 25,
+                    blur: 15,
+                    maxZoom: 17,
+                    gradient: {
+                        0.4: 'blue',
+                        0.6: 'cyan',
+                        0.7: 'lime',
+                        0.8: 'yellow',
+                        1.0: 'red'
+                    }
+                })
+            );
+        }
+
+        // Show clustered points
+        function showClusters(clusters) {
+            clusters.forEach(cluster => {
+                const marker = L.marker([cluster.centerLatitude, cluster.centerLongitude], {
+                    icon: L.divIcon({
+                        className: 'cluster-marker',
+                        html: `<div style="
+                            width: ${30 + cluster.pointCount * 2}px;
+                            height: ${30 + cluster.pointCount * 2}px;
+                            line-height: ${30 + cluster.pointCount * 2}px;
+                            background: ${getClusterColor(cluster.averageIntensity)};
+                            ">${cluster.pointCount}</div>`,
+                        iconSize: [30 + cluster.pointCount * 2, 30 + cluster.pointCount * 2]
+                    })
+                });
+
+                marker.bindPopup(`
+                    <div class="text-center">
+                        <h6>Incident Cluster</h6>
+                        <p><strong>${cluster.pointCount}</strong> incidents in this area</p>
+                        <p><strong>Categories:</strong> ${cluster.categories.join(', ')}</p>
+                        <p><strong>Average Risk:</strong> ${(cluster.averageIntensity * 100).toFixed(0)}%</p>
+                    </div>
+                `);
+
+                clustersLayer.addLayer(marker);
+            });
+        }
+
+        // Show individual points
+        function showPoints(points) {
+            points.forEach(point => {
+                const marker = L.marker([point.latitude, point.longitude], {
+                    icon: L.divIcon({
+                        className: 'incident-marker',
+                        html: `<div style="
+                            background: ${getMarkerColor(point)};
+                            width: 12px;
+                            height: 12px;
+                            border-radius: 50%;
+                            border: 2px solid white;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                        "></div>`,
+                        iconSize: [16, 16]
+                    })
+                });
+
+                marker.bindPopup(`
+                    <div>
+                        <h6>${point.title}</h6>
+                        <p><strong>Category:</strong> ${point.category}</p>
+                        <p><strong>Status:</strong> ${point.status}</p>
+                        <p><strong>Priority:</strong> ${point.priority}</p>
+                        <p><strong>Location:</strong> ${point.location}</p>
+                        <p><strong>Date:</strong> ${new Date(point.createdAt).toLocaleDateString()}</p>
+                        <button class="btn btn-sm btn-primary mt-2" onclick="viewIncidentDetails('${point.reportId}')">
+                            View Details
+                        </button>
+                    </div>
+                `);
+
+                markersLayer.addLayer(marker);
+            });
+        }
+
+        // Update statistics panel
+        function updateStats(points, filters) {
+            const total = points.length;
+            const verified = points.filter(p => p.status === 'Verified').length;
+            const highPriority = points.filter(p => p.priority === 'High' || p.priority === 'Critical').length;
+            const categories = [...new Set(points.map(p => p.category))];
+
+            const statsHtml = `
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Total Incidents:</span>
+                        <span class="badge bg-primary">${total}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Verified:</span>
+                        <span class="badge bg-success">${verified}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>High Priority:</span>
+                        <span class="badge bg-danger">${highPriority}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Categories:</span>
+                        <span class="badge bg-secondary">${categories.length}</span>
+                    </div>
+                </div>
+                ${filters.category || filters.status || filters.priority ? `
+                    <div class="alert alert-info p-2">
+                        <small>
+                            <strong>Filtered by:</strong><br>
+                            ${filters.category ? `Category: ${filters.category}<br>` : ''}
+                            ${filters.status ? `Status: ${filters.status}<br>` : ''}
+                            ${filters.priority ? `Priority: ${filters.priority}` : ''}
+                        </small>
+                    </div>
+                ` : ''}
+            `;
+
+            $('#mapStats').html(statsHtml);
+        }
+
+        // Load hotspots
+        function loadHotspots() {
+            $.get('/HeatMap/GetIncidentHotspots')
+                .done(function(response) {
+                    if (response.success && response.hotspots.length > 0) {
+                        let hotspotsHtml = '';
+                        response.hotspots.forEach(hotspot => {
+                            const riskClass = hotspot.riskScore > 0.7 ? 'risk-high' :
+                                            hotspot.riskScore > 0.4 ? 'risk-medium' : 'risk-low';
+
+                            hotspotsHtml += `
+                                <div class="hotspot-item ${riskClass} p-3 mb-2 bg-light rounded">
+                                    <div class="fw-semibold">${hotspot.location}</div>
+                                    <div class="small text-muted">
+                                        ${hotspot.reportCount} incidents •
+                                        ${hotspot.highPriorityCount} high priority<br>
+                                        Latest: ${new Date(hotspot.latestIncident).toLocaleDateString()}
+                                    </div>
+                                    <div class="mt-1">
+                                        ${hotspot.categories.map(cat =>
+                                            `<span class="badge bg-secondary me-1">${cat}</span>`
+                                        ).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        $('#hotspotsList').html(hotspotsHtml);
+                    } else {
+                        $('#hotspotsList').html('<div class="text-center text-muted py-3">No hotspots found</div>');
+                    }
+                })
+                .fail(function() {
+                    $('#hotspotsList').html('<div class="text-center text-danger py-3">Failed to load hotspots</div>');
+                });
+        }
+
+        // View incident details
+        function viewIncidentDetails(reportId) {
+            $('#incidentDetails').html(`
+                <div class="text-center">
+                    <i class="fas fa-sync fa-spin fa-2x mb-2"></i>
+                    <p>Loading incident details...</p>
+                </div>
+            `);
+
+            $('#viewReportBtn').attr('href', `/Admin/ReportDetails/${reportId}`);
+            $('#incidentModal').modal('show');
+
+            // Simulate loading details
+            setTimeout(() => {
+                $('#incidentDetails').html(`
+                    <p>Incident details would be loaded here for report ID: ${reportId}</p>
+                    <p>This would include full description, media files, verification status, etc.</p>
+                `);
+            }, 1000);
+        }
+
+        // Utility functions
+        function getMarkerColor(point) {
+            if (point.priority === 'Critical') return '#dc3545';
+            if (point.priority === 'High') return '#fd7e14';
+            if (point.status === 'Verified') return '#198754';
+            return '#ffc107';
+        }
+
+        function getClusterColor(intensity) {
+            if (intensity > 0.7) return '#dc3545';
+            if (intensity > 0.4) return '#fd7e14';
+            return '#ffc107';
+        }
+
+        function showLoading(elementId) {
+            $('#' + elementId).html(`
+                <div class="text-center text-muted">
+                    <i class="fas fa-sync fa-spin fa-2x mb-2"></i>
+                    <p>Loading...</p>
+                </div>
+            `);
+        }
+
+        function showError(elementId, message) {
+            $('#' + elementId).html(`
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>${message}
+                </div>
+            `);
+        }
+
+        // Event handlers
+        $(document).ready(function() {
+            initMap();
+
+            // Filter form submission
+            $('#applyFilters').click(function() {
+                const filters = {
+                    category: $('#categoryFilter').val(),
+                    status: $('#statusFilter').val() || null,
+                    priority: $('#priorityFilter').val() || null,
+                    startDate: $('#startDateFilter').val(),
+                    endDate: $('#endDateFilter').val()
+                };
+                loadHeatMapData(filters);
+            });
+
+            // Map type switching
+            $('[data-map-type]').click(function() {
+                const mapType = $(this).data('map-type');
+                currentMapType = mapType;
+
+                // Update button states
+                $('[data-map-type]').removeClass('active').addClass('btn-outline-secondary');
+                $(this).removeClass('btn-outline-secondary').addClass('active btn-primary');
+
+                // Reload current data with new view
+                updateMap(currentData, []);
+            });
+
+            // Auto-refresh every 2 minutes
+            setInterval(() => {
+                loadHeatMapData();
+                loadHotspots();
+            }, 120000);
+        });
+    </script>
+}

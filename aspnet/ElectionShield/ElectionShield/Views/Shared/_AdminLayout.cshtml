@@ -82,7 +82,6 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 sidebar d-md-block collapse">
                 <div class="position-sticky pt-3">
                     <div class="text-center mb-4">
@@ -121,6 +120,14 @@
                                asp-controller="Admin" asp-action="VerifiedReports">
                                 <i class="fas fa-check-circle"></i>
                                 Verified Reports
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewBag.ActiveSection == "heatmap" ? "active" : "")"
+                               asp-controller="HeatMap" asp-action="Index">
+                                <i class="fas fa-map-marked-alt"></i>
+                                Heat Map
                             </a>
                         </li>
                         <li class="nav-item">
