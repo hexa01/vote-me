@@ -9,85 +9,83 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ElectionShield
 build_property.RootNamespace = ElectionShield
-build_property.ProjectDir = /home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/
+build_property.ProjectDir = D:\viewa\vote-me\aspnet\ElectionShield\vote-me\aspnet\ElectionShield\ElectionShield\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield
+build_property.MSBuildProjectDirectory = D:\viewa\vote-me\aspnet\ElectionShield\vote-me\aspnet\ElectionShield\ElectionShield
 build_property._RazorSourceGeneratorDebug = 
-build_property.EffectiveAnalysisLevelStyle = 8.0
-build_property.EnableCodeStyleSeverity = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Account/Login.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Admin/Dashboard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRGFzaGJvYXJkLmNzaHRtbA==
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Admin/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Admin/PendingReports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vUGVuZGluZ1JlcG9ydHMuY3NodG1s
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Admin/PendingReports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUGVuZGluZ1JlcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Admin/ReportDetails.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vUmVwb3J0RGV0YWlscy5jc2h0bWw=
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Admin/ReportDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUmVwb3J0RGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Home/UserPortal.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Vc2VyUG9ydGFsLmNzaHRtbA==
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Home/UserPortal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVc2VyUG9ydGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVwb3J0L0NyZWF0ZS5jc2h0bWw=
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/GetAllReports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVwb3J0L0dldEFsbFJlcG9ydHMuY3NodG1s
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/GetAllReports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XEdldEFsbFJlcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/ReportDetails.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVwb3J0L1JlcG9ydERldGFpbHMuY3NodG1s
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/ReportDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XFJlcG9ydERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/Success.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVwb3J0L1N1Y2Nlc3MuY3NodG1s
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/Success.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XFN1Y2Nlc3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/Track.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVwb3J0L1RyYWNrLmNzaHRtbA==
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Report/Track.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XFRyYWNrLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Shared/Error.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Shared/_LoginPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19Mb2dpblBhcnRpYWwuY3NodG1s
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Shared/_LoginPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/_ViewImports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/Views/Shared/_Layout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-wrnyqmtat8
+[D:/viewa/vote-me/aspnet/ElectionShield/vote-me/aspnet/ElectionShield/ElectionShield/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-zrw8uyepvw

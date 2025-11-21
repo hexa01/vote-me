@@ -11747,24 +11747,27 @@
     ]
   },
   "packageFolders": {
-    "/home/debian/.nuget/packages/": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/ElectionShield.csproj",
+      "projectUniqueName": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\ElectionShield.csproj",
       "projectName": "ElectionShield",
-      "projectPath": "/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/ElectionShield.csproj",
-      "packagesPath": "/home/debian/.nuget/packages/",
-      "outputPath": "/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/obj/",
+      "projectPath": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\ElectionShield.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/debian/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11782,8 +11785,7 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.300"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -11919,17 +11921,11 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.308/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file /home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/obj/project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
-    },
     {
       "code": "NU1903",
       "level": "Warning",

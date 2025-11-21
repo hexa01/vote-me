@@ -1744,6 +1744,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\196105fd-92d5-4e42-b787-e49e8e800dfb_gettyimages-91391529-612x612.jpg))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\246a80fe-47b1-4229-8320-a4927d663fae_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg))">
+      <SourceType>Package</SourceType>
+      <SourceId>ElectionShield</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ElectionShield</BasePath>
+      <RelativePath>uploads/reports/246a80fe-47b1-4229-8320-a4927d663fae_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\246a80fe-47b1-4229-8320-a4927d663fae_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\2d0680e2-8ef6-4c68-869f-114316fe3b39_gettyimages-91391529-612x612.jpg))">
       <SourceType>Package</SourceType>
       <SourceId>ElectionShield</SourceId>
@@ -1856,6 +1872,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\6b6dea84-ce29-4b08-92a9-9b19e033b6b0_gettyimages-91391529-612x612.jpg))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\6d5c6c4d-fc67-4f77-8c04-b46da44cf6f8_pasted file.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>ElectionShield</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ElectionShield</BasePath>
+      <RelativePath>uploads/reports/6d5c6c4d-fc67-4f77-8c04-b46da44cf6f8_pasted file.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\6d5c6c4d-fc67-4f77-8c04-b46da44cf6f8_pasted file.png))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\84f5e8c1-34a4-415b-b36e-ab41e45ddce3_DOC-20250720-WA0001. (1).pdf))">
       <SourceType>Package</SourceType>
       <SourceId>ElectionShield</SourceId>
@@ -1871,6 +1903,102 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\84f5e8c1-34a4-415b-b36e-ab41e45ddce3_DOC-20250720-WA0001. (1).pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\9ad6c259-e90f-4c0c-9f6c-4b819500c58a_95578-0.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>ElectionShield</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ElectionShield</BasePath>
+      <RelativePath>uploads/reports/9ad6c259-e90f-4c0c-9f6c-4b819500c58a_95578-0.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\9ad6c259-e90f-4c0c-9f6c-4b819500c58a_95578-0.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\cfc76826-ed76-4ad3-802f-745ebb4370ef_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg))">
+      <SourceType>Package</SourceType>
+      <SourceId>ElectionShield</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ElectionShield</BasePath>
+      <RelativePath>uploads/reports/cfc76826-ed76-4ad3-802f-745ebb4370ef_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\cfc76826-ed76-4ad3-802f-745ebb4370ef_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\d00fb3fd-cef2-450b-9163-a4f5c3cf96a5_pasted file.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>ElectionShield</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ElectionShield</BasePath>
+      <RelativePath>uploads/reports/d00fb3fd-cef2-450b-9163-a4f5c3cf96a5_pasted file.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\d00fb3fd-cef2-450b-9163-a4f5c3cf96a5_pasted file.png))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\d2a471e8-472e-4ed1-8587-11996254e618_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg))">
+      <SourceType>Package</SourceType>
+      <SourceId>ElectionShield</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ElectionShield</BasePath>
+      <RelativePath>uploads/reports/d2a471e8-472e-4ed1-8587-11996254e618_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\d2a471e8-472e-4ed1-8587-11996254e618_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\d7ca820c-3510-477c-9266-caf5cc864f0a_download.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>ElectionShield</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ElectionShield</BasePath>
+      <RelativePath>uploads/reports/d7ca820c-3510-477c-9266-caf5cc864f0a_download.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\d7ca820c-3510-477c-9266-caf5cc864f0a_download.png))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\fac736e9-78e6-43da-b11b-90ce2c12c3a8_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg))">
+      <SourceType>Package</SourceType>
+      <SourceId>ElectionShield</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ElectionShield</BasePath>
+      <RelativePath>uploads/reports/fac736e9-78e6-43da-b11b-90ce2c12c3a8_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\reports\fac736e9-78e6-43da-b11b-90ce2c12c3a8_ALOIS ARNEGGER (Austrian, 1879-1963)_ Alpine Glow, Kitzbuehel _ Lot #69070 _ Heritage Auctions.jpeg))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>
