@@ -31,7 +31,10 @@ async def analyze(file: UploadFile = File(...)):
             "ocr": ocr_results
         }
 
+    try:
         os.remove(tmp_file_path)
+    except:
+        pass
     
     return response
 

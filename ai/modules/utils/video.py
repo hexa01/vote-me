@@ -6,12 +6,13 @@ import os
 
 def process_video(video_path, flag_model, person_model, classifier):
     cap = cv2.VideoCapture(video_path)
-    frame_results = []
-    frame_interval = 30  # analyze 1 frame every 30 frames (~1 sec)
+
+    frame_interval = 30  # 1 frame per sec
     count = 0
 
-    ocr_total = []
-    classification_final = []
+    classification_all = []
+    ocr_all = []
+    frame_results = []  # for summary
 
     while True:
         ret, frame = cap.read()
@@ -19,44 +20,49 @@ def process_video(video_path, flag_model, person_model, classifier):
             break
 
         if count % frame_interval == 0:
-            cv2.imwrite("temp_frame.jpg", frame)
+            temp_img = "temp_frame.jpg"
+            cv2.imwrite(temp_img, frame)
 
-            detect_results = detect_image("temp_frame.jpg", flag_model, person_model)
+            detect_results = detect_image(temp_img, flag_model, person_model)
 
-            classified = classifier(detect_results)
-            frame_results.append(classified)
+            frame_results.append(detect_results)
 
             try:
-                ocr_res = ocr_image("temp_frame.jpg")
+                ocr_res = ocr_image(temp_img)
             except Exception:
                 ocr_res = {"text": "", "segments": []}
-            ocr_total.append(ocr_res)
+
+            ocr_all.append(ocr_res)
 
             cls_res = classify(detect_results, ocr_res.get("text", ""))
-            classification_final.append(cls_res)
+            classification_all.append(cls_res)
 
         count += 1
 
     cap.release()
 
-    if len(classification_final) > 0:
-        avg_score = sum([c['risk_score'] for c in classification_final]) / len(classification_final)
+    # risk/confidence scoe
+    if len(classification_all) > 0:
+        avg_score = sum([c["risk_score"] for c in classification_all]) / len(classification_all)
     else:
         avg_score = 0.0
 
+    # -tags
     tags = set()
-    for c in classification_final:
+    for c in classification_all:
         for t in c.get("ai_tags", []):
             tags.add(t)
 
-    ocr_combined = " ".join([o.get("text", "") for o in ocr_total if o.get("text")])
+    # combine
+    ocr_combined = " ".join([o.get("text", "") for o in ocr_all if o.get("text")])
 
+    # detection  test for test
     detections_lite = frame_results[:10]
 
     return {
         "risk_score": round(avg_score, 2),
         "tags": list(tags),
-        "frames_analyzed": len(classification_final),
+        "frames_analyzed": len(classification_all),
         "ocr_combined_text": ocr_combined,
         "detections": detections_lite,
     }
