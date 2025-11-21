@@ -110,15 +110,15 @@ namespace ElectionShield.Services
                 if (firstSavedFilePath != null)
                 {
                     _logger.LogInformation("firstSavedFilePath: {Path}", firstSavedFilePath);
-                    _logger.LogInformation("_aiService is null? {Value}", _aiService == null);
+                    // _logger.LogInformation("_aiService is null? {Value}", _aiService == null);
                     _logger.LogInformation("_fileService is null? {Value}", _fileService == null);
                     _logger.LogInformation("_context is null? {Value}", _context == null);
 
                     var absoluteFilePath = Path.Combine(_environment.WebRootPath, firstSavedFilePath);
 
-                    var analysis = await _aiService.AnalyzeFileAsync(absoluteFilePath);
+                    // var analysis = await _aiService.AnalyzeFileAsync(absoluteFilePath);
 
-                    report.AiAnalysisResult = analysis;
+                    // report.AiAnalysisResult = analysis;
                     await _context.SaveChangesAsync();
                 }
 
@@ -174,7 +174,7 @@ namespace ElectionShield.Services
                     .Include(r => r.MediaFiles)
                     .Include(r => r.Verification)
                     .ThenInclude(v => v.AdminUser)
-                    .Include(r => r.AIAnalysis)
+                    // .Include(r => r.AIAnalysis)
                     .OrderByDescending(r => r.CreatedAt)
                     .ToListAsync();
 
