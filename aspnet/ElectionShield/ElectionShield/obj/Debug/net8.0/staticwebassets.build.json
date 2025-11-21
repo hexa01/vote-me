@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "/HkPc09loxq0uVWPOVE493GSKaIietkTCU7x5SvwpvA=",
+  "Hash": "fbPb31+Ea3z/zrJgSrEmbZqfhcFLH8FFcgofxLzpfVg=",
   "Source": "ElectionShield",
   "BasePath": "_content/ElectionShield",
   "Mode": "Default",
@@ -3169,6 +3169,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\wwwroot\\uploads\\reports\\84f5e8c1-34a4-415b-b36e-ab41e45ddce3_DOC-20250720-WA0001. (1).pdf",
+      "SourceId": "ElectionShield",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\wwwroot\\",
+      "BasePath": "_content/ElectionShield",
+      "RelativePath": "uploads/reports/84f5e8c1-34a4-415b-b36e-ab41e45ddce3_DOC-20250720-WA0001. (1).pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\reports\\84f5e8c1-34a4-415b-b36e-ab41e45ddce3_DOC-20250720-WA0001. (1).pdf"
     }
   ]
 }
