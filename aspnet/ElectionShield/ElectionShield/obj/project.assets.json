@@ -11747,24 +11747,27 @@
     ]
   },
   "packageFolders": {
-    "/home/hexa01/.nuget/packages/": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/hexa01/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/ElectionShield.csproj",
+      "projectUniqueName": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\ElectionShield.csproj",
       "projectName": "ElectionShield",
-      "projectPath": "/home/hexa01/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/ElectionShield.csproj",
-      "packagesPath": "/home/hexa01/.nuget/packages/",
-      "outputPath": "/home/hexa01/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/obj/",
+      "projectPath": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\ElectionShield.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/hexa01/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11777,6 +11780,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -11913,7 +11921,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.121/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   },

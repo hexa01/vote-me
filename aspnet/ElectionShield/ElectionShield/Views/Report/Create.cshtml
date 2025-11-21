@@ -137,7 +137,20 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        // Initialize map
+
+        $("#MediaFiles").on("change", async function () {
+       var file = $(this).val();
+       var aireqest = json.strigfy{
+           (
+           )
+       }
+
+
+
+        });
+
+
+
         var map = L.map('map').setView([20.5937, 78.9629], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
