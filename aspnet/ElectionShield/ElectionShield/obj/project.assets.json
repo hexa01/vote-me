@@ -11747,11 +11747,16 @@
     ]
   },
   "packageFolders": {
+<<<<<<< HEAD
     "/home/debian/.nuget/packages/": {}
+=======
+    "/home/hexa01/.nuget/packages/": {}
+>>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/ElectionShield.csproj",
       "projectName": "ElectionShield",
       "projectPath": "/home/debian/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/ElectionShield.csproj",
@@ -11760,6 +11765,16 @@
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/debian/.nuget/NuGet/NuGet.Config"
+=======
+      "projectUniqueName": "/home/hexa01/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/ElectionShield.csproj",
+      "projectName": "ElectionShield",
+      "projectPath": "/home/hexa01/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/ElectionShield.csproj",
+      "packagesPath": "/home/hexa01/.nuget/packages/",
+      "outputPath": "/home/hexa01/Desktop/vote-me/aspnet/ElectionShield/ElectionShield/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/hexa01/.nuget/NuGet/NuGet.Config"
+>>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -11777,6 +11792,7 @@
         "warnAsError": [
           "NU1605"
         ]
+<<<<<<< HEAD
       },
       "restoreAuditProperties": {
         "enableAudit": "true",
@@ -11784,6 +11800,9 @@
         "auditMode": "direct"
       },
       "SdkAnalysisLevel": "9.0.300"
+=======
+      }
+>>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
     },
     "frameworks": {
       "net8.0": {
@@ -11919,7 +11938,11 @@
             "privateAssets": "all"
           }
         },
+<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.308/PortableRuntimeIdentifierGraph.json"
+=======
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.121/PortableRuntimeIdentifierGraph.json"
+>>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
       }
     }
   },

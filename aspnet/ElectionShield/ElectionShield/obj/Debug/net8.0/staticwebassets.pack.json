@@ -421,6 +421,10 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "D:\\viewa\\vote-me\\aspnet\\ElectionShield\\ElectionShield\\wwwroot\\uploads\\reports\\84f5e8c1-34a4-415b-b36e-ab41e45ddce3_DOC-20250720-WA0001. (1).pdf",
+      "PackagePath": "staticwebassets\\uploads\\reports\\84f5e8c1-34a4-415b-b36e-ab41e45ddce3_DOC-20250720-WA0001. (1).pdf"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.ElectionShield.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

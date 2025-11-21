@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ElectionShield.Services;
 using ElectionShield.ViewModels;
+<<<<<<< HEAD
 using System.Threading.Tasks;
+=======
+using ElectionShield.Data;
+using ElectionShield.Models;
+>>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
 
 namespace ElectionShield.Controllers
 {
@@ -9,11 +14,15 @@ namespace ElectionShield.Controllers
     {
         private readonly IReportService _reportService;
         private readonly ILogger<ReportController> _logger;
+        private readonly AiService _aiService;
+        private readonly ApplicationDbContext _context;
 
-        public ReportController(IReportService reportService, ILogger<ReportController> logger)
+        public ReportController(ApplicationDbContext context, IReportService reportService, ILogger<ReportController> logger)
         {
             _reportService = reportService;
             _logger = logger;
+            _context = context;
+            _aiService = new AiService();
         }
 
         [HttpGet]
@@ -84,6 +93,7 @@ namespace ElectionShield.Controllers
             return View(model);
         }
 
+<<<<<<< HEAD
         [HttpGet]
 
         public async Task<IActionResult> GetAllReports(int id)
@@ -97,5 +107,36 @@ namespace ElectionShield.Controllers
             var reports = await _reportService.GetAllReportsAsync();
             return Ok(reports);
         }
+=======
+
+        [HttpPost]
+        public async Task<IActionResult> UploadReport()
+        {
+            var file = Request.Form.Files[0];
+            if (file.Length > 0)
+            {
+                var filePath = Path.Combine("wwwroot/uploads", file.FileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Call AI-service
+                var aiResultJson = await _aiService.AnalyzeFileAsync(filePath);
+
+                // Save to Reports table
+                var report = new Report
+                {
+                    //report data
+                };
+                _context.Reports.Add(report);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, aiResult = aiResultJson });
+            }
+            return Json(new { success = false });
+        }
+
+>>>>>>> 2bb9588f5202beec4f1ffd56826a0491cb6e7113
     }
 }
