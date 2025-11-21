@@ -32,7 +32,7 @@ namespace ElectionShield.Services
             _logger = logger;
 
             // Configure HttpClient for WhatsApp API
-            _httpClient.BaseAddress = new Uri("https://graph.facebook.com/v17.0/");
+            _httpClient.BaseAddress = new Uri("");
             _httpClient.DefaultRequestHeaders.Add("Authorization",
                 $"Bearer {_configuration["WhatsApp:AccessToken"]}");
         }

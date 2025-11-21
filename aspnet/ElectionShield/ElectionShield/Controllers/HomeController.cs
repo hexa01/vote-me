@@ -22,7 +22,7 @@ namespace ElectionShield.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Rules()
         {
             return View();
         }
@@ -36,7 +36,7 @@ namespace ElectionShield.Controllers
         [HttpGet]
         public async Task<IActionResult> UserPortal()
         {
-            var reports = await _reportService.GetAllReportsAsync();
+            var reports = await _reportService.GetApprovedReportsAsync();
             return View(reports);
         }
     }
