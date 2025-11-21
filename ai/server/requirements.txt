@@ -4,3 +4,5 @@ torch
 torchvision
 fastapi
 uvicorn
+easyocr
+pillow
