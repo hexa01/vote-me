@@ -12,6 +12,7 @@ namespace ElectionShield.Services
         Task<Report> CreateReportAsync(CreateReportViewModel model);
         Task<ReportViewModel?> GetReportByCodeAsync(string reportCode);
         Task<List<ReportViewModel>> GetAllReportsAsync();
+        Task<List<ReportViewModel>> GetVerifiedReportsAsync();
         Task<List<ReportViewModel>> GetPendingReportsAsync();
         Task<List<ReportViewModel>> GetReportsByStatusAsync(ReportStatus status);
         Task<bool> UpdateReportStatusAsync(Guid reportId, ReportStatus status);
@@ -187,6 +188,29 @@ namespace ElectionShield.Services
                 throw;
             }
         }
+
+        public async Task<List<ReportViewModel>> GetVerifiedReportsAsync()
+        {
+            try
+            {
+                var reports = await _context.Reports
+                    .Include(r => r.MediaFiles)
+                    .Include(r => r.Verification)
+                    .ThenInclude(v => v.AdminUser)
+                    // .Include(r => r.AIAnalysis)
+                    .OrderByDescending(r => r.CreatedAt)
+                    .Where(r => r.Verification.Status.ToString() == "Verified")
+                    .ToListAsync();
+
+                return reports.Select(MapToViewModel).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all reports");
+                throw;
+            }
+        }
+
 
         public async Task<List<ReportViewModel>> GetPendingReportsAsync()
         {

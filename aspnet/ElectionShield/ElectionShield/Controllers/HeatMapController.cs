@@ -73,8 +73,8 @@ namespace ElectionShield.Controllers
                         Status = r.Status,
                         Priority = r.Priority,
                         CreatedAt = r.CreatedAt,
-                        Location = r.Location,
-                        Intensity = CalculateIntensity(r.Priority, r.Status)
+                        Location = r.Location
+                        // Intensity = CalculateIntensity(r.Priority, r.Status)
                     })
                     .ToListAsync();
 

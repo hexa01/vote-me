@@ -171,7 +171,7 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <i class="fas fa-circle text-danger me-2"></i>
-                        <small>High Priority</small>
+                        <small>Rejected Reports</small>
                     </div>
                 </div>
             </div>
@@ -242,14 +242,108 @@
     </style>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script>
+        $(document).ready(async function(){
+            initMap();
 
-<!-- Your custom script -->
-<script src="path/to/your/custom-heatmap.js"></script>
+            let mapPoints = await getIncidents();
+            debugger;
 
-    <script>
+            addReportMarkers(mapPoints);
+        });
+
+            function initMap() {
+            map = L.map('heatMap').setView([20.5937, 78.9629], 5); // Center on India
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            // Create layer groups
+            heatLayer = L.layerGroup().addTo(map);
+            markersLayer = L.layerGroup().addTo(map);
+            clustersLayer = L.layerGroup().addTo(map);
+        }
+
+function getIncidents() {
+    return $.ajax({
+        url: "/Report/GetAllReports",
+        type: "POST"
+    });
+}
+
+function addReportMarkers(reports) {
+
+    // Use a red marker icon
+    var redIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    var yellowIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    var greenIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    reports.forEach(r => {
+        debugger;
+        if (r.latitude && r.longitude) {
+
+            if(r.status === 2){
+            L.marker([r.latitude, r.longitude], { icon: greenIcon })
+                .addTo(map)
+                .bindPopup(`
+                    <b>${r.title}</b><br/>
+                    ${r.location}<br/>
+                    <span class="text-muted">${r.category}</span>
+                    <a href = "/Report/Track?reportCode=${r.reportCode}">View Report</a>
+                `);
+            }
+            else if(r.Status === 0){
+                            L.marker([r.latitude, r.longitude], { icon: yellowIcon })
+                .addTo(map)
+                .bindPopup(`
+                    <b>${r.title}</b><br/>
+                    ${r.location}<br/>
+                    <span class="text-muted">${r.category}</span>
+                    <a href = "/Report/Track?reportCode=${r.reportCode}">View Report</a>
+                `);
+            }
+            else{
+                L.marker([r.latitude, r.longitude], { icon: redIcon })
+                .addTo(map)
+                .bindPopup(`
+                    <b>${r.title}</b><br/>
+                    ${r.location}<br/>
+                    <span class="text-muted">${r.category}</span>
+                    <a href = "/Report/Track?reportCode=${r.reportCode}">View Report</a>
+                `);
+            }
+        }
+    });
+}
+</script>
+
+    @* <script>
         // Global variables
         let map;
         let heatLayer;
@@ -276,6 +370,12 @@
             loadHotspots();
         }
 
+
+
+
+
+
+
         // Load heatmap data with filters
         function loadHeatMapData(filters = {}) {
             showLoading('mapStats');
@@ -291,6 +391,7 @@
                 .fail(function() {
                     showError('mapStats', 'Failed to load heatmap data');
                 });
+                debugger;
         }
 
         // Update map based on current view type
@@ -638,4 +739,4 @@
             });
     }
 
-    </script>
+    </script> *@

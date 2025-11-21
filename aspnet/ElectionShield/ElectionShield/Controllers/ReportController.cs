@@ -105,6 +105,20 @@ namespace ElectionShield.Controllers
             return Ok(reports);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetVerifiedReports(int id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> GetVerifiedReports()
+        {
+            var reports = await _reportService.GetVerifiedReportsAsync();
+            return Ok(reports);
+        }
+
         [HttpPost]
         public async Task<IActionResult> UploadReport()
         {
