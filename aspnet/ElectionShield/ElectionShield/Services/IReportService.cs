@@ -4,6 +4,7 @@ using ElectionShield.ViewModels;
 using MailKit;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
+using System.Text.Json;
 
 namespace ElectionShield.Services
 {
@@ -68,7 +69,8 @@ namespace ElectionShield.Services
                     CreatedAt = DateTime.UtcNow,
                     CreatedBy = model.CreatedBy
                 };
-
+                
+                // var fileUpload = await ElectionShield.Services.AnalyzeFileAsync();
                 _context.Reports.Add(report);
                 await _context.SaveChangesAsync();
 
@@ -118,10 +120,23 @@ namespace ElectionShield.Services
 
                     var absoluteFilePath = Path.Combine(_environment.WebRootPath, firstSavedFilePath);
 
-                    // var analysis = await _aiService.AnalyzeFileAsync(absoluteFilePath);
+                    var analysis = await _aiService.AnalyzeFileAsync(absoluteFilePath);
 
-                    // report.AiAnalysisResult = analysis;
-                    await _context.SaveChangesAsync();
+                    report.AiAnalysisResult = analysis;
+                    string result = report.AiAnalysisResult;
+                    using JsonDocument doc = JsonDocument.Parse(result);
+                    JsonElement root = doc.RootElement;
+
+                    double riskScore = root.GetProperty("risk_score").GetDouble();
+                    if(riskScore > 5.0)
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        report.Status = ReportStatus.RejectedByAI;
+                        await _context.SaveChangesAsync();
+                    }
                 }
 
                 _logger.LogInformation("Report created successfully: {ReportCode}", report.ReportCode);

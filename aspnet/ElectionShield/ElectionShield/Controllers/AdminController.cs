@@ -37,6 +37,7 @@ namespace ElectionShield.Controllers
                     PendingReports = await _context.Reports.CountAsync(r => r.Status == ReportStatus.Pending),
                     VerifiedReports = await _context.Reports.CountAsync(r => r.Status == ReportStatus.Verified),
                     RejectedReports = await _context.Reports.CountAsync(r => r.Status == ReportStatus.Rejected),
+                    RejectedByAIReports = await _context.Reports.CountAsync(r => r.Status == ReportStatus.RejectedByAI),
 
                     // Today's Activity
                     ReportsToday = await _context.Reports

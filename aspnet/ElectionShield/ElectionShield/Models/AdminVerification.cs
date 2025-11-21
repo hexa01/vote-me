@@ -36,6 +36,8 @@ namespace ElectionShield.Models
         Rejected,
         NeedsMoreInfo,
         Escalated,
-        Duplicate
+        Duplicate,
+
+        RejectedByAI
     }
 }
