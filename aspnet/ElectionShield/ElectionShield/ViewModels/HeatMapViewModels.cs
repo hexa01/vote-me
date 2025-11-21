@@ -57,6 +57,8 @@ namespace ElectionShield.ViewModels
 
     public class Hotspot
     {
+       // public double RiskScore { get; set; }
+
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Location { get; set; } = string.Empty;

@@ -5,6 +5,7 @@
     Layout = "_AdminLayout";
     ViewBag.ActiveSection = Model.ActiveSection;
 }
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0">
@@ -199,7 +200,6 @@
     </div>
 </div>
        
-@section Styles {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.css" />
     <style>
@@ -240,11 +240,15 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
     </style>
-}
 
-@section Scripts {
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
+<!-- Your custom script -->
+<script src="path/to/your/custom-heatmap.js"></script>
+
     <script>
         // Global variables
         let map;
@@ -573,5 +577,65 @@
                 loadHotspots();
             }, 120000);
         });
+
+    function loadHotspots() {
+        $.get('/HeatMap/GetIncidentHotspots')
+            .done(function (response) {
+                if (response.success && response.hotspots.length > 0) {
+                    let hotspotsHtml = '';
+
+                    response.hotspots.forEach(hotspot => {
+                        const riskClass =
+                            hotspot.riskScore > 0.7 ? 'risk-high' :
+                                hotspot.riskScore > 0.4 ? 'risk-medium' :
+                                    'risk-low';
+
+                        hotspotsHtml += `
+                            <div class="hotspot-item p-3 mb-3 ${riskClass}">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="fw-bold">${hotspot.location}</h6>
+                                    <span class="badge bg-danger">${hotspot.reportCount} Reports</span>
+                                </div>
+
+                                <div class="small text-muted">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    ${hotspot.latitude.toFixed(4)}, ${hotspot.longitude.toFixed(4)}
+                                </div>
+
+                                <div class="mt-2">
+                                    <strong>Categories:</strong>
+                                    <span class="text-secondary">${hotspot.categories.join(', ')}</span>
+                                </div>
+
+                                <div class="mt-2">
+                                    <span class="badge bg-warning text-dark">
+                                        Risk Score: ${(hotspot.riskScore * 100).toFixed(0)}%
+                                    </span>
+                                </div>
+
+                                <div class="mt-2 small">
+                                    <strong>Latest:</strong> ${new Date(hotspot.latestIncident).toLocaleString()}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    $('#hotspotsList').html(hotspotsHtml);
+                } else {
+                    $('#hotspotsList').html(`
+                        <div class="text-center text-muted py-3">
+                            No hotspots found.
+                        </div>
+                    `);
+                }
+            })
+            .fail(function () {
+                $('#hotspotsList').html(`
+                    <div class="alert alert-danger">
+                        Failed to load hotspots.
+                    </div>
+                `);
+            });
+    }
+
     </script>
-}
