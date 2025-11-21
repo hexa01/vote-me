@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ElectionShield.Services;
 using ElectionShield.ViewModels;
+using System.Threading.Tasks;
 
 namespace ElectionShield.Controllers
 {
@@ -81,6 +82,20 @@ namespace ElectionShield.Controllers
         public IActionResult ReportDetails(ReportViewModel model)
         {
             return View(model);
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> GetAllReports(int id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllReports()
+        {
+            var reports = await _reportService.GetAllReportsAsync();
+            return Ok(reports);
         }
     }
 }

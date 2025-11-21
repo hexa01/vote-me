@@ -136,9 +136,17 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+
     <script>
+
+    $(document).ready(function(){
+
+        var incidents = AjaxCall("/Report/GetAllReports");
+        debugger;
+    });
         // Initialize map
-        var map = L.map('map').setView([20.5937, 78.9629], 5);
+        var map = L.map('map').setView([28.175655, 83.965759], 7);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
@@ -147,9 +155,8 @@
         var latitudeInput = document.getElementById('latitude');
         var longitudeInput = document.getElementById('longitude');
 
-        // Set initial coordinates (India center)
-        latitudeInput.value = '20.5937';
-        longitudeInput.value = '78.9629';
+        latitudeInput.value = '28.175655';
+        longitudeInput.value = '83.965759';
 
         map.on('click', function (e) {
             if (marker) {
