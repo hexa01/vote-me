@@ -136,6 +136,8 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+
     <script>
 
         $("#MediaFiles").on("change", async function () {
@@ -160,9 +162,8 @@
         var latitudeInput = document.getElementById('latitude');
         var longitudeInput = document.getElementById('longitude');
 
-        // Set initial coordinates (India center)
-        latitudeInput.value = '20.5937';
-        longitudeInput.value = '78.9629';
+        latitudeInput.value = '28.175655';
+        longitudeInput.value = '83.965759';
 
         map.on('click', function (e) {
             if (marker) {
