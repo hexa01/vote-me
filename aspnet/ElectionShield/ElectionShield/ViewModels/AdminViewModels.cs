@@ -9,6 +9,8 @@ namespace ElectionShield.ViewModels
         public int PendingReports { get; set; }
         public int VerifiedReports { get; set; }
         public int RejectedReports { get; set; }
+
+        public int RejectedByAIReports { get; set; }
         public int ReportsToday { get; set; }
         public int HighPriorityReports { get; set; }
         public int ReportsWithMedia { get; set; }

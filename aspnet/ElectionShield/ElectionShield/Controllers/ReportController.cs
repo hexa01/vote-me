@@ -4,6 +4,7 @@ using ElectionShield.ViewModels;
 using System.Threading.Tasks;
 using ElectionShield.Data;
 using ElectionShield.Models;
+using System.Text.Json;
 
 namespace ElectionShield.Controllers
 {

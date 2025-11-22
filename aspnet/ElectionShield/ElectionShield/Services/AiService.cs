@@ -18,13 +18,10 @@ public class AiService
 
         form.Add(new StreamContent(stream), "file", Path.GetFileName(filePath));
 
-        var response = await _httpClient.PostAsync("http://192.168.88.183:8000/analyze", form);
+        var response = await _httpClient.PostAsync("http://127.0.0.1:8000/analyze", form);
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadAsStringAsync();
     }
 }
-
-
-
 }

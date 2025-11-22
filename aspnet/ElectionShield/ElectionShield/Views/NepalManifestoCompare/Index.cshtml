@@ -1,0 +1,81 @@
+﻿@model SimpleNepalCompareViewModel
+
+<div class="container mt-5">
+    <h2>Nepal Manifesto Comparison</h2>
+
+    <form asp-action="Compare" enctype="multipart/form-data" method="post">
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>First Manifesto</label>
+                <input type="file" name="FirstManifestoFile" class="form-control" required />
+            </div>
+
+            <div class="col-md-6">
+                <label>Second Manifesto</label>
+                <input type="file" name="SecondManifestoFile" class="form-control" required />
+            </div>
+        </div>
+
+        <button class="btn btn-primary mt-3">Compare</button>
+    </form>
+
+    <hr />
+
+    @if (Model.Result != null)
+    {
+        @if (Model.Result.Success)
+        {
+            <h3>Comparison Result</h3>
+
+            <p><strong>Overall Similarity:</strong> @Model.Result.SimilarityPercentage %</p>
+
+            <h4 class="mt-4">Summary of Document A</h4>
+            <pre>@Model.ApiRaw?.summary_a</pre>
+
+            <h4 class="mt-4">Summary of Document B</h4>
+            <pre>@Model.ApiRaw?.summary_b</pre>
+
+            <h4 class="mt-4">Top Matched Paragraphs</h4>
+            @if (Model.ApiRaw?.top_pairs != null)
+            {
+                foreach (var p in Model.ApiRaw.top_pairs)
+                {
+                    <div class="border p-3 mb-3">
+                        <strong>Similarity Score:</strong> @p.score
+                        <p><strong>A:</strong> @p.para_a</p>
+                        <p><strong>B:</strong> @p.para_b</p>
+                    </div>
+                }
+            }
+
+            @if (Model.ApiRaw?.unique_a?.Any() == true)
+            {
+                <h4>Unique Content in Document A</h4>
+                <ul>
+                    @foreach (var u in Model.ApiRaw.unique_a)
+                    {
+                        <li>@u</li>
+                    }
+                </ul>
+            }
+
+            @if (Model.ApiRaw?.unique_b?.Any() == true)
+            {
+                <h4>Unique Content in Document B</h4>
+                <ul>
+                    @foreach (var u in Model.ApiRaw.unique_b)
+                    {
+                        <li>@u</li>
+                    }
+                </ul>
+            }
+        }
+        else
+        {
+            <div class="alert alert-danger">
+                @Model.Result.Error
+            </div>
+        }
+    }
+</div>

@@ -43,6 +43,16 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="UserPortal">
                                 <i class="fas fa-search me-1"></i>User Portal
                             </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Rules">
+                                <i class="fas fa-search me-1"></i>Election Rules
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "NepalManifestoCompare")">
+                                <i class="fas fa-balance-scale me-1"></i>Manifesto Compare
+                            </a>
                         </li>
                         @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
                         {
