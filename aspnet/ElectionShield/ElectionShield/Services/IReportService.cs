@@ -2,6 +2,7 @@
 using ElectionShield.Models;
 using ElectionShield.ViewModels;
 using MailKit;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using System.Text.Json;
