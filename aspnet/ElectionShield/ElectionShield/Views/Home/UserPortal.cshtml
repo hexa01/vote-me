@@ -6,10 +6,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Election Shield - Reports</title>
-    
+    <title>Election Shield - Approved Reports</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    
+
     <style>
         .hero-text {
             font-size: 3.5rem;
@@ -20,6 +21,7 @@
             background-clip: text;
             line-height: 1.2;
         }
+
         .report-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
@@ -27,22 +29,66 @@
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .report-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-        .report-card img {
-            height: 280px;
-            object-fit: cover;
-        }
+
+            .report-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            }
+
+            .report-card img, .report-card video {
+                height: 280px;
+                object-fit: cover;
+                width: 100%;
+            }
+
         .upload-btn {
             padding: 14px 40px;
             font-size: 1.2rem;
             font-weight: 600;
             border-radius: 50px;
         }
+
         .section-padding {
             padding: 60px 0;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .report-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .report-meta {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .approved-badge {
+            background: linear-gradient(45deg, #28a745, #20c997);
         }
     </style>
 </head>
@@ -56,22 +102,35 @@
                 <span class="text-primary">can make a</span><br>
                 <span class="text-primary">BIG Difference</span>
             </h1>
+            <p class="lead text-muted mb-4">
+                View approved election monitoring reports from our community
+            </p>
             <a href="/Report/Create" class="btn btn-primary btn-lg upload-btn shadow-lg">
                 <i class="bi bi-cloud-upload me-2"></i> Upload Evidence
             </a>
         </div>
     </section>
 
-    <!-- Evidence Gallery -->
+    <!-- Approved Evidence Gallery -->
     <section class="section-padding bg-light">
         <div class="container">
-            <h2 class="text-center mb-5 fw-bold text-dark">Community Submitted Evidence</h2>
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <h2 class="fw-bold text-dark mb-0">Approved Community Evidence</h2>
+                <span class="badge bg-success fs-6">
+                    <i class="bi bi-check-circle me-1"></i>
+                    @Model.Count Approved Reports
+                </span>
+            </div>
 
             @if (!Model.Any())
             {
                 <div class="text-center py-5">
-                    <i class="bi bi-image display-1 text-muted"></i>
-                    <p class="mt-3 text-muted fs-4">No evidence uploaded yet. Be the first!</p>
+                    <i class="bi bi-check-circle display-1 text-success mb-3"></i>
+                    <h4 class="text-muted">No approved reports yet</h4>
+                    <p class="text-muted">Submitted reports are pending admin approval. Check back later!</p>
+                    <a href="/Report/Create" class="btn btn-primary mt-3">
+                        <i class="bi bi-cloud-upload me-2"></i> Be the first to submit evidence
+                    </a>
                 </div>
             }
             else
@@ -79,57 +138,91 @@
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
                     @foreach (var report in Model)
                     {
-                        @foreach (var media in report.MediaFiles)
-                        {
-<div class="col">
-    <div class="card report-card h-100">
-        <!-- Media placeholder -->
-        <img src="/@media.FilePath" class="card-img-top media-element imageReport" alt="Election evidence">
-        <video class="card-img-top media-element videoReport" controls style="display:none;">
-            <source src="/@media.FilePath" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+                        <div class="col">
+                            <div class="card report-card h-100 position-relative">
+                                <!-- Status Badge -->
+                                <span class="badge approved-badge status-badge">
+                                    <i class="bi bi-check-circle me-1"></i> Approved
+                                </span>
 
-        <div class="card-body text-center">
-        <h4></h4>
-            <small class="text-muted">
-                Uploaded on @report.CreatedAt.ToString("MMM dd, yyyy")
-            </small>
-        </div>
-    </div>
-</div>
+                                <!-- Category Badge -->
+                                <span class="badge bg-primary category-badge">
+                                    @report.Category
+                                </span>
 
-                        }
+                                <!-- Media Content -->
+                                @if (report.MediaFiles.Any())
+                                {
+                                    var media = report.MediaFiles.First();
+                                    var fileExtension = System.IO.Path.GetExtension(media.FilePath).ToLower();
+                                    var isImage = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp" }.Contains(fileExtension);
+                                    var isVideo = new[] { ".mp4", ".avi", ".mov", ".wmv" }.Contains(fileExtension);
+
+                                    if (isImage)
+                                    {
+                                        <img src="/@media.FilePath" class="card-img-top media-element" alt="@report.Title" loading="lazy">
+                                    }
+                                    else if (isVideo)
+                                    {
+                                        <video class="card-img-top media-element" controls>
+                                            <source src="/@media.FilePath" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    }
+                                    else
+                                    {
+                                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white">
+                                            <i class="bi bi-file-earmark-text display-4"></i>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-image display-4 text-muted"></i>
+                                    </div>
+                                }
+
+                                <div class="card-body">
+                                    <h5 class="report-title">@report.Title</h5>
+                                    <p class="report-description">@(report.Description.Length > 100 ? report.Description.Substring(0, 100) + "..." : report.Description)</p>
+
+                                    <div class="report-meta">
+                                        <div class="mb-2">
+                                            <i class="bi bi-geo-alt me-1"></i>
+                                            <small>@report.Location</small>
+                                        </div>
+                                        <div class="mb-2">
+                                            <i class="bi bi-clock me-1"></i>
+                                            <small>@report.CreatedAt.ToString("MMM dd, yyyy 'at' h:mm tt")</small>
+                                        </div>
+                                        <div>
+                                            <i class="bi bi-collection me-1"></i>
+                                            <small>@report.MediaFiles.Count media files</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                 </div>
             }
         </div>
     </section>
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function(){
-
-            var imageExtensions = ["png", "jpg", "gif", "jpeg", ".ico"];
-            var videoExtensions = ["mp4", "mkv", "webm", "m4a"];
-            $(".imageReport").each(function(){
-                var fileName = $(this).attr("src");
-                var extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-                imageExtensions.forEach(item => {
-                    if(extension === item){
-                        $(this).show();
-                        $(this).siblings(".videoReport").hide();
-                    }
+        // Optional: Add any additional JavaScript functionality here
+        document.addEventListener('DOMContentLoaded', function () {
+            // Auto-play videos on hover
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.addEventListener('mouseenter', function () {
+                    this.play();
                 });
-            });
-
-            $(".videoReport").each(function(){
-                var fileName = $(this).find("source").attr("src");
-                var extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-                videoExtensions.forEach(item => {
-                    if(extension === item){
-                        $(this).show();
-                        $(this).siblings(".imageReport").hide();
-                    }
+                video.addEventListener('mouseleave', function () {
+                    this.pause();
+                    this.currentTime = 0;
                 });
             });
         });

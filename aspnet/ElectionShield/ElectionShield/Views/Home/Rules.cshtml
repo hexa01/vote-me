@@ -1,0 +1,211 @@
+﻿<style>
+
+  /* Removed Dark Theme styles */
+  
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); color:var(--text); line-height:1.45}
+  .wrap{max-width:var(--maxw);margin:36px auto;padding:20px}
+ h1{margin:0;font-size:20px}
+  p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+  nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+  .btn{background:var(--card);border:1px solid rgba(15,23,42,0.06);padding:8px 12px;border-radius:8px;cursor:pointer}
+  .btn.ghost{background:transparent}
+  .controls{margin-left:auto;display:flex;gap:8px}
+
+  main{display:grid;grid-template-columns:1fr 320px;gap:18px}
+  @@media (max-width:900px){main{grid-template-columns:1fr} .sidebar{order:2}}
+
+  .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+  .section-title{font-weight:700;margin:0 0 10px}
+
+  /* Rules list */
+  .rules{display:flex;flex-direction:column;gap:10px}
+  .rule{border-left:4px solid rgba(14,165,164,0.12);padding:12px;background:transparent;border-radius:8px}
+  .rule summary{cursor:pointer;outline:none;font-weight:600}
+  .rule p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+  /* Video list */
+  .video-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @@media (max-width:480px){.video-grid{grid-template-columns:1fr}}
+  .video-thumb{position:relative;padding-top:56.25%;overflow:hidden;border-radius:8px;background:#000}
+  .video-thumb iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+  /* Sidebar */
+  .sticky-wrapper{
+   position: sticky;
+   top: 18px; 
+  }
+
+  .search input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(2,6,23,0.06)}
+  .tag{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(14,165,164,0.12);color:var(--accent);font-weight:600;font-size:12px}
+
+  footer{margin-top:20px;text-align:center;color:var(--muted);font-size:13px}
+
+  /* Print styles are no longer needed since the button is gone, but keeping the print media query for standard browser printing */
+  @@media print{
+   body{background:white;color:black}
+   .controls, .sidebar{display:none}
+   .wrap{margin:0;padding:0}
+   .card{box-shadow:none}
+  }
+ </style>
+ <div class="wrap" id="app">
+  <header>
+   <div class="logo" style="width:100px;height:100px">
+                <img src="https://election.gov.np/static/media/logo.fdf1cfa1.png" alt="Portal Logo" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">
+   </div>
+
+   <div>
+    <h1>Election Info Portal</h1>
+    <p class="lead">Official information hub — rules, regulations, and verified videos. Use for awareness and reporting.</p>
+   </div>
+   </header>
+
+  <nav aria-label="Main navigation">
+   <button class="btn" data-target="rules">Rules & Regulations</button>
+   <button class="btn" data-target="videos">Videos</button>
+   <button class="btn" data-target="faq">FAQ</button>
+  </nav>
+
+  <main>
+   <section aria-labelledby="rules" class="card" id="content">
+    <h2 class="section-title">Rules & Regulations</h2>
+    <div class="rules" id="rulesList">
+
+     <details class="rule"><summary>1. Nothing detrimental to the nationality, independence, sovereignty, multiparty democracy, parliamentary system, or constitutional monarchy of Nepal</summary><p>Nothing detrimental to these principles should be propagated or published during the election period.</p></details>
+
+     <details class="rule"><summary>2. No voting influence based on religion, caste, ethnicity, or language</summary><p>Voters should not be encouraged to vote on these grounds.</p></details>
+
+     <details class="rule"><summary>3. No character assassination</summary><p>No one is entitled to assassinate the character of any candidate or their family member.</p></details>
+
+     <details class="rule"><summary>4. Decent campaign language</summary><p>Candidates must use restrained language that conforms to accepted norms of decency.</p></details>
+
+     <details class="rule"><summary>5. No campaigning 48 hours before election</summary><p>All rallies and campaigns must stop within this period.</p></details>
+
+     <details class="rule"><summary>6. No posters on religious or historic sites</summary><p>These areas must not be used for pasting or painting campaign materials.</p></details>
+
+     <details class="rule"><summary>7. No posters on private residences without consent</summary><p>Consent is mandatory.</p></details>
+
+     <details class="rule"><summary>8. Do not destroy or overwrite others’ posters</summary><p>Snatching, destroying, or damaging another party’s posters is not allowed.</p></details>
+
+     <details class="rule"><summary>9. Remove campaign materials after election</summary><p>Parties must remove posters, pamphlets, and symbols after the election.</p></details>
+
+     <details class="rule"><summary>10. Do not damage election materials</summary><p>No one may amend, damage, or remove official Election Commission materials.</p></details>
+
+     <details class="rule"><summary>11. No publicity using banners or cloth</summary><p>Banner-based publicity is not allowed.</p></details>
+
+     <details class="rule"><summary>12. Allowed poster and pamphlet sizes</summary><p>Pamphlets up to 6" x 10" and posters up to 18" x 22", one color only, with printer details included.</p></details>
+
+     <details class="rule"><summary>13. No plastic material during canvassing</summary><p>Plastic materials are prohibited.</p></details>
+
+     <details class="rule"><summary>14. Vehicle and loudspeaker limits</summary><p>No more than three vehicles and three loudspeakers per candidate.</p></details>
+
+     <details class="rule"><summary>15. Audio use rules</summary><p>Audio devices allowed only 7am–9pm; no prolonged use in one location except public meetings.</p></details>
+
+     <details class="rule"><summary>16. Allowed timing for meetings and rallies</summary><p>Meetings and rallies only allowed between 7am and 9pm; no arms or torch demonstrations.</p></details>
+
+     <details class="rule"><summary>17. Must inform local administration before rallies</summary><p>Political parties must inform concerned authorities before meetings.</p></details>
+
+     <details class="rule"><summary>18. No fear or intimidation</summary><p>Threats, intimidation, force, or temptation must not be used.</p></details>
+
+     <details class="rule"><summary>19. No compelling voters</summary><p>No one should compel voters through threats or religious oaths.</p></details>
+
+     <details class="rule"><summary>20. No writing or painting around polling stations</summary><p>All such materials must be removed before polling.</p></details>
+
+     <details class="rule"><summary>21. No obstructing voters</summary><p>No one may obstruct or attempt to obstruct voters.</p></details>
+
+     <details class="rule"><summary>22. No force or seizure of ballot materials</summary><p>No coercion or seizure of ballot boxes or materials.</p></details>
+
+     <details class="rule"><summary>23. No procession during nomination registration</summary><p>Candidates must not enter restricted areas with a procession.</p></details>
+
+     <details class="rule"><summary>24. No vehicle rallies</summary><p>Truck, tractor, bus, rickshaw, car, or motorcycle rallies are not allowed. Bicycles allowed.</p></details>
+
+     <details class="rule"><summary>25. Only one vehicle on Election Day</summary><p>Each candidate may use only one vehicle.</p></details>
+
+     <details class="rule"><summary>26. No feasts or parties to influence voters</summary><p>Arranging parties or feasts to influence voters is prohibited.</p></details>
+
+     <details class="rule"><summary>27. No slogan chanting during polling or counting</summary><p>No slogans should be chanted during polling and counting.</p></details>
+
+     <details class="rule"><summary>28. Parties must inform workers about code of conduct</summary><p>Parties must ensure supporters understand and follow the rules.</p></details>
+
+     <details class="rule"><summary>29. Candidates must follow all laws and acts</summary><p>This includes all directives and the Election Crimes and Punishment Act of 1990.</p></details>
+
+    </div>
+
+    <!-- <hr style="margin:18px 0;opacity:.08" />
+    <h3 class="section-title">Quick Reference</h3>
+    <p style="color:var(--muted);margin:6px 0">Distance restrictions: 100 meters from polling station. Penalties vary by jurisdiction — check local election commission for specifics.</p> -->
+
+   </section>
+
+   <aside class="sidebar">
+    <div class="sticky-wrapper"> 
+     <div class="card">
+      <h3 class="section-title">Search</h3>
+      <div class="search"><input id="searchInput" type="search" placeholder="Search rules or keywords..." aria-label="Search rules" /></div>
+      
+
+     <div class="card" style="margin-top:12px">
+      <h3 class="section-title">Quick Links</h3>
+      <ul style="margin:8px 0 0;padding:0 18px;color:var(--muted)">
+       <li> <a style= "text-decoration:none; color:black;" href="https://election.gov.np/">Election Commission</a></li>
+       <li><a style= "text-decoration:none; color: black;" font href="https://applyvrst.election.gov.np">Voter Pre-registration</a></li>
+      </ul>
+     </div>
+    </div>
+   </aside>
+
+  <section class="card" id="videos">
+<h2 class="section-title">Verified Videos</h2>
+<p style="color:var(--muted);margin:6px 0 12px">Short clips on common violations and official guidance.</p>
+<div class="video-grid">
+<div class="video-thumb"><iframe src="https://www.youtube.com/embed/Zoma2f0pY6Y" title="video1" allowfullscreen></iframe></div>
+<div class="video-thumb"><iframe src="https://www.youtube.com/embed/FFyqwDZkzGo" title="video2" allowfullscreen></iframe></div>
+</div>
+</section>
+
+   <section class="card" id="faq" style="grid-column:1/-1;margin-top:12px">
+    <h2 class="section-title">FAQ</h2>
+    <details>
+     <summary>How do I report bribery?</summary>
+     <div style="margin-top:8px;color:var(--muted)">Gather evidence if safe, note time and location, and submit via the official app or hotline. Use anonymous mode if you fear retaliation.</div>
+    </details>
+    <details>
+     <summary>Can I upload a video?</summary>
+     <div style="margin-top:8px;color:var(--muted)">Yes. Keep videos short, preserve faces if the reporter is comfortable, or use the app's blur feature for safety.</div>
+    </details>
+   </section>
+
+  </main>
+
+  <footer>
+   <small>Election Info Portal — informational only. Not affiliated with any government body.</small>
+  </footer>
+ </div>
+
+ <script>
+  // Removed references to root, toggle, printBtn, setTheme function, and event listeners for theme and print.
+  const searchInput = document.getElementById('searchInput');
+  const rulesList = document.getElementById('rulesList');
+
+  searchInput.addEventListener('input', (e)=>{
+   const q = e.target.value.toLowerCase().trim();
+   const items = rulesList.querySelectorAll('.rule');
+   items.forEach(it=>{
+    const text = it.innerText.toLowerCase();
+    it.style.display = text.includes(q) ? 'block':'none';
+   })
+  });
+
+  document.querySelectorAll('nav button[data-target]').forEach(btn=>{
+   btn.addEventListener('click', ()=>{
+    const target = btn.getAttribute('data-target');
+    const el = document.getElementById(target);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+   })
+  });
+
+  document.querySelectorAll('summary').forEach(s=> s.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') s.click(); }));
+ </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"499e684b7b1043878977050a0a606794","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>

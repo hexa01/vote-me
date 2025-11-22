@@ -33,7 +33,8 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddHttpClient<AiService>();
 builder.Services.AddHttpClient<IWhatsAppService, WhatsAppService>();
 builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
-
+//builder.Services.AddScoped<IManifestoService, ManifestoService>();
+//builder.Services.AddScoped<ITextSimilarityService, TextSimilarityService>();
 builder.Services.AddSession(options =>
 {
     options.Cookie.HttpOnly = true;

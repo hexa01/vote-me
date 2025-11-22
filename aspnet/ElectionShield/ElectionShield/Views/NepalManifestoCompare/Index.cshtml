@@ -1,0 +1,262 @@
+﻿@model ElectionShield.Models.SimpleNepalCompareViewModel
+@{
+    ViewData["Title"] = "Nepal Manifesto Comparison Tool";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-file-contract me-2"></i>नेपाली घोषणापत्र तुलना उपकरण
+                    </h4>
+                    <small class="opacity-75">Nepali Manifesto Comparison Tool</small>
+                </div>
+
+                <div class="card-body">
+                    <!-- Simple Upload Form -->
+                    <form asp-action="Compare" method="post" enctype="multipart/form-data" id="compareForm">
+                        <div class="row">
+                            <!-- First Manifesto -->
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light text-center">
+                                        <h6 class="mb-0">पहिलो घोषणापत्र<br><small>First Manifesto</small></h6>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <div class="file-upload-area" onclick="document.getElementById('FirstManifestoFile').click()">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                            <p class="mb-2">Click to upload PDF or Text file</p>
+                                            <small class="text-muted">PDF, TXT, DOC files supported</small>
+                                        </div>
+                                        <input asp-for="FirstManifestoFile" class="form-control d-none"
+                                               accept=".pdf,.txt,.doc,.docx" />
+                                        <span asp-validation-for="FirstManifestoFile" class="text-danger small"></span>
+
+                                        <div id="firstFileName" class="mt-2 small text-success"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Manifesto -->
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light text-center">
+                                        <h6 class="mb-0">दोस्रो घोषणापत्र<br><small>Second Manifesto</small></h6>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <div class="file-upload-area" onclick="document.getElementById('SecondManifestoFile').click()">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                            <p class="mb-2">Click to upload PDF or Text file</p>
+                                            <small class="text-muted">PDF, TXT, DOC files supported</small>
+                                        </div>
+                                        <input asp-for="SecondManifestoFile" class="form-control d-none"
+                                               accept=".pdf,.txt,.doc,.docx" />
+                                        <span asp-validation-for="SecondManifestoFile" class="text-danger small"></span>
+
+                                        <div id="secondFileName" class="mt-2 small text-success"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Compare Button -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg px-5" id="compareBtn">
+                                <i class="fas fa-balance-scale me-2"></i>तुलना गर्नुहोस् (Compare)
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Validation Summary -->
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-3"></div>
+
+                    <!-- Results Section -->
+                    @if (Model.Result != null)
+                    {
+                        <div id="resultsSection" class="mt-4">
+                            <div class="card border-0">
+                                <div class="card-header bg-success text-white text-center">
+                                    <h5 class="mb-0">तुलना परिणाम<br><small>Comparison Results</small></h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (Model.Result.Success)
+                                    {
+                                        <!-- Overall Similarity -->
+                                        <div class="text-center mb-4">
+                                            <div class="similarity-score text-primary mb-2">
+                                                @Model.Result.SimilarityPercentage.ToString("0.0")%
+                                            </div>
+                                            <p class="lead">समानताको प्रतिशत<br><small>Similarity Percentage</small></p>
+                                            <div class="progress" style="height: 25px;">
+                                                <div class="progress-bar bg-primary progress-bar-striped"
+                                                     style="width: @Model.Result.SimilarityPercentage.ToString("0.0")%">
+                                                    @Model.Result.SimilarityPercentage.ToString("0.0")%
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Statistics -->
+                                        <div class="row text-center mb-4">
+                                            <div class="col-md-4">
+                                                <div class="card border-success">
+                                                    <div class="card-body py-3">
+                                                        <h3 class="text-success mb-1">@Model.Result.SimilarPromises</h3>
+                                                        <small class="text-muted">समान वचनहरू<br>Similar Promises</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="card border-warning">
+                                                    <div class="card-body py-3">
+                                                        <h3 class="text-warning mb-1">@Model.Result.DifferentPromises</h3>
+                                                        <small class="text-muted">फरक वचनहरू<br>Different Promises</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="card border-info">
+                                                    <div class="card-body py-3">
+                                                        <h3 class="text-info mb-1">@Model.Result.TotalPromisesFound</h3>
+                                                        <small class="text-muted">कुल वचनहरू<br>Total Promises Found</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Comparison Points -->
+                                        @if (Model.Result.ComparisonPoints.Any())
+                                        {
+                                            <div class="mt-4">
+                                                <h6 class="text-center mb-3">
+                                                    <i class="fas fa-list me-2"></i>तुलना बिन्दुहरू<br>
+                                                    <small class="text-muted">Comparison Points</small>
+                                                </h6>
+                                                <div class="comparison-list">
+                                                    @foreach (var point in Model.Result.ComparisonPoints)
+                                                    {
+                                                        <div class="alert alert-light border mb-2">
+                                                            @if (point.StartsWith("✓"))
+                                                            {
+                                                                <i class="fas fa-check text-success me-2"></i>
+                                                                <span class="text-success">@point.Substring(2)</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="fas fa-minus text-warning me-2"></i>
+                                                                <span class="text-dark">@point.Substring(2)</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="alert alert-danger text-center">
+                                            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                                            <h5>तुलना असफल भयो</h5>
+                                            <p class="mb-0">@Model.Result.Error</p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h6><i class="fas fa-info-circle me-2"></i>कसरी प्रयोग गर्ने:</h6>
+                    <ol class="small mb-0">
+                        <li>दुईवटा घोषणापत्र फाइलहरू अपलोड गर्नुहोस् (PDF वा Text)</li>
+                        <li>"तुलना गर्नुहोस्" बटन क्लिक गर्नुहोस्</li>
+                        <li>समानताको प्रतिशत र तुलना परिणाम हेर्नुहोस्</li>
+                    </ol>
+                    <hr>
+                    <h6><i class="fas fa-info-circle me-2"></i>How to use:</h6>
+                    <ol class="small mb-0">
+                        <li>Upload two manifesto files (PDF or Text)</li>
+                        <li>Click "Compare" button</li>
+                        <li>View similarity percentage and comparison results</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <style>
+        .file-upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-area:hover {
+            border-color: #007bff;
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .similarity-score {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+
+        .card {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .comparison-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+
+
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('FirstManifestoFile').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || 'No file selected';
+            document.getElementById('firstFileName').textContent = 'Selected: ' + fileName;
+        });
+
+        document.getElementById('SecondManifestoFile').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || 'No file selected';
+            document.getElementById('secondFileName').textContent = 'Selected: ' + fileName;
+        });
+
+        document.getElementById('compareForm').addEventListener('submit', function() {
+            const btn = document.getElementById('compareBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>तुलना हुदैछ...';
+        });
+        document.querySelectorAll('.file-upload-area').forEach(area => {
+            area.addEventListener('click', function() {
+                const fileInput = this.closest('.card-body').querySelector('input[type="file"]');
+                fileInput.click();
+            });
+        });
+    </script>
