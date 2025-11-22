@@ -129,14 +129,18 @@ namespace ElectionShield.Services
                     using JsonDocument doc = JsonDocument.Parse(result);
                     JsonElement root = doc.RootElement;
 
+
                     double riskScore = root.GetProperty("risk_score").GetDouble();
-                    if(riskScore > 5.0)
+                    string aiTag = root.GetProperty("ai_tags").ToString();
+                    if(riskScore >= 0.5 || aiTag != null)
                     {
+                        report.AiTag = aiTag;
                         await _context.SaveChangesAsync();
                     }
                     else
                     {
                         report.Status = ReportStatus.RejectedByAI;
+                        report.AiTag = aiTag;
                         await _context.SaveChangesAsync();
                     }
                 }

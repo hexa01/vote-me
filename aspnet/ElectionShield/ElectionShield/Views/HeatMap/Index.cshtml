@@ -105,7 +105,7 @@
     <div class="col-lg-4">
         <!-- Summary Stats -->
         <div class="card mb-4">
-            <div class="card-header bg-white">
+            @* <div class="card-header bg-white">
                 <h5 class="card-title mb-0">
                     <i class="fas fa-chart-bar me-2"></i>Map Summary
                 </h5>
@@ -135,7 +135,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> *@
 
         <!-- Legend -->
         <div class="card">
@@ -145,7 +145,7 @@
                 </h5>
             </div>
             <div class="card-body">
-                <div class="mb-2">
+                @* <div class="mb-2">
                     <div class="d-flex align-items-center mb-1">
                         <div class="legend-color heat-high me-2" style="width: 20px; height: 20px;"></div>
                         <small>High Intensity (Critical/High Priority)</small>
@@ -159,7 +159,7 @@
                         <small>Low Intensity (Low Priority)</small>
                     </div>
                 </div>
-                <hr>
+                <hr> *@
                 <div class="mb-2">
                     <div class="d-flex align-items-center mb-1">
                         <i class="fas fa-circle text-success me-2"></i>
@@ -304,11 +304,12 @@ function addReportMarkers(reports) {
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
     });
+    debugger;
     reports.forEach(r => {
         debugger;
         if (r.latitude && r.longitude) {
 
-            if(r.status === 2){
+            if(r.status === 2 || r.status === 4 || r.status === 6){
             L.marker([r.latitude, r.longitude], { icon: greenIcon })
                 .addTo(map)
                 .bindPopup(`
@@ -318,7 +319,7 @@ function addReportMarkers(reports) {
                     <a href = "/Report/Track?reportCode=${r.reportCode}">View Report</a>
                 `);
             }
-            else if(r.Status === 0){
+            if(r.status === 0 || r.status === 1){
                             L.marker([r.latitude, r.longitude], { icon: yellowIcon })
                 .addTo(map)
                 .bindPopup(`
@@ -328,7 +329,7 @@ function addReportMarkers(reports) {
                     <a href = "/Report/Track?reportCode=${r.reportCode}">View Report</a>
                 `);
             }
-            else{
+            if(r.status === 3 || r.status === 7){
                 L.marker([r.latitude, r.longitude], { icon: redIcon })
                 .addTo(map)
                 .bindPopup(`
@@ -342,401 +343,3 @@ function addReportMarkers(reports) {
     });
 }
 </script>
-
-    @* <script>
-        // Global variables
-        let map;
-        let heatLayer;
-        let markersLayer;
-        let clustersLayer;
-        let currentData = [];
-        let currentMapType = 'heatmap';
-
-        // Initialize map
-        function initMap() {
-            map = L.map('heatMap').setView([20.5937, 78.9629], 5); // Center on India
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 18
-            }).addTo(map);
-
-            // Create layer groups
-            heatLayer = L.layerGroup().addTo(map);
-            markersLayer = L.layerGroup().addTo(map);
-            clustersLayer = L.layerGroup().addTo(map);
-
-            loadHeatMapData();
-            loadHotspots();
-        }
-
-
-
-
-
-
-
-        // Load heatmap data with filters
-        function loadHeatMapData(filters = {}) {
-            showLoading('mapStats');
-
-            $.get('/HeatMap/GetHeatMapData', filters)
-                .done(function(response) {
-                    if (response.success) {
-                        currentData = response.points;
-                        updateMap(response.points, response.clusters);
-                        updateStats(response.points, response.filteredBy);
-                    }
-                })
-                .fail(function() {
-                    showError('mapStats', 'Failed to load heatmap data');
-                });
-                debugger;
-        }
-
-        // Update map based on current view type
-        function updateMap(points, clusters) {
-            // Clear existing layers
-            heatLayer.clearLayers();
-            markersLayer.clearLayers();
-            clustersLayer.clearLayers();
-
-            if (points.length === 0) {
-                // Show message for no data
-                L.marker([20.5937, 78.9629])
-                    .bindPopup('No incidents found for the selected filters')
-                    .addTo(markersLayer)
-                    .openPopup();
-                return;
-            }
-
-            switch (currentMapType) {
-                case 'heatmap':
-                    showHeatMap(points);
-                    break;
-                case 'clusters':
-                    showClusters(clusters);
-                    break;
-                case 'points':
-                    showPoints(points);
-                    break;
-            }
-
-            // Fit map to show all points
-            const group = new L.featureGroup(
-                points.map(p => L.marker([p.latitude, p.longitude]))
-            );
-            map.fitBounds(group.getBounds().pad(0.1));
-        }
-
-        // Show heatmap visualization
-        function showHeatMap(points) {
-            const heatPoints = points.map(p => [p.latitude, p.longitude, p.intensity * 10]);
-
-            heatLayer.addLayer(
-                L.heatLayer(heatPoints, {
-                    radius: 25,
-                    blur: 15,
-                    maxZoom: 17,
-                    gradient: {
-                        0.4: 'blue',
-                        0.6: 'cyan',
-                        0.7: 'lime',
-                        0.8: 'yellow',
-                        1.0: 'red'
-                    }
-                })
-            );
-        }
-
-        // Show clustered points
-        function showClusters(clusters) {
-            clusters.forEach(cluster => {
-                const marker = L.marker([cluster.centerLatitude, cluster.centerLongitude], {
-                    icon: L.divIcon({
-                        className: 'cluster-marker',
-                        html: `<div style="
-                            width: ${30 + cluster.pointCount * 2}px;
-                            height: ${30 + cluster.pointCount * 2}px;
-                            line-height: ${30 + cluster.pointCount * 2}px;
-                            background: ${getClusterColor(cluster.averageIntensity)};
-                            ">${cluster.pointCount}</div>`,
-                        iconSize: [30 + cluster.pointCount * 2, 30 + cluster.pointCount * 2]
-                    })
-                });
-
-                marker.bindPopup(`
-                    <div class="text-center">
-                        <h6>Incident Cluster</h6>
-                        <p><strong>${cluster.pointCount}</strong> incidents in this area</p>
-                        <p><strong>Categories:</strong> ${cluster.categories.join(', ')}</p>
-                        <p><strong>Average Risk:</strong> ${(cluster.averageIntensity * 100).toFixed(0)}%</p>
-                    </div>
-                `);
-
-                clustersLayer.addLayer(marker);
-            });
-        }
-
-        // Show individual points
-        function showPoints(points) {
-            points.forEach(point => {
-                const marker = L.marker([point.latitude, point.longitude], {
-                    icon: L.divIcon({
-                        className: 'incident-marker',
-                        html: `<div style="
-                            background: ${getMarkerColor(point)};
-                            width: 12px;
-                            height: 12px;
-                            border-radius: 50%;
-                            border: 2px solid white;
-                            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-                        "></div>`,
-                        iconSize: [16, 16]
-                    })
-                });
-
-                marker.bindPopup(`
-                    <div>
-                        <h6>${point.title}</h6>
-                        <p><strong>Category:</strong> ${point.category}</p>
-                        <p><strong>Status:</strong> ${point.status}</p>
-                        <p><strong>Priority:</strong> ${point.priority}</p>
-                        <p><strong>Location:</strong> ${point.location}</p>
-                        <p><strong>Date:</strong> ${new Date(point.createdAt).toLocaleDateString()}</p>
-                        <button class="btn btn-sm btn-primary mt-2" onclick="viewIncidentDetails('${point.reportId}')">
-                            View Details
-                        </button>
-                    </div>
-                `);
-
-                markersLayer.addLayer(marker);
-            });
-        }
-
-        // Update statistics panel
-        function updateStats(points, filters) {
-            const total = points.length;
-            const verified = points.filter(p => p.status === 'Verified').length;
-            const highPriority = points.filter(p => p.priority === 'High' || p.priority === 'Critical').length;
-            const categories = [...new Set(points.map(p => p.category))];
-
-            const statsHtml = `
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>Total Incidents:</span>
-                        <span class="badge bg-primary">${total}</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>Verified:</span>
-                        <span class="badge bg-success">${verified}</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>High Priority:</span>
-                        <span class="badge bg-danger">${highPriority}</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>Categories:</span>
-                        <span class="badge bg-secondary">${categories.length}</span>
-                    </div>
-                </div>
-                ${filters.category || filters.status || filters.priority ? `
-                    <div class="alert alert-info p-2">
-                        <small>
-                            <strong>Filtered by:</strong><br>
-                            ${filters.category ? `Category: ${filters.category}<br>` : ''}
-                            ${filters.status ? `Status: ${filters.status}<br>` : ''}
-                            ${filters.priority ? `Priority: ${filters.priority}` : ''}
-                        </small>
-                    </div>
-                ` : ''}
-            `;
-
-            $('#mapStats').html(statsHtml);
-        }
-
-        // Load hotspots
-        function loadHotspots() {
-            $.get('/HeatMap/GetIncidentHotspots')
-                .done(function(response) {
-                    if (response.success && response.hotspots.length > 0) {
-                        let hotspotsHtml = '';
-                        response.hotspots.forEach(hotspot => {
-                            const riskClass = hotspot.riskScore > 0.7 ? 'risk-high' :
-                                            hotspot.riskScore > 0.4 ? 'risk-medium' : 'risk-low';
-
-                            hotspotsHtml += `
-                                <div class="hotspot-item ${riskClass} p-3 mb-2 bg-light rounded">
-                                    <div class="fw-semibold">${hotspot.location}</div>
-                                    <div class="small text-muted">
-                                        ${hotspot.reportCount} incidents •
-                                        ${hotspot.highPriorityCount} high priority<br>
-                                        Latest: ${new Date(hotspot.latestIncident).toLocaleDateString()}
-                                    </div>
-                                    <div class="mt-1">
-                                        ${hotspot.categories.map(cat =>
-                                            `<span class="badge bg-secondary me-1">${cat}</span>`
-                                        ).join('')}
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        $('#hotspotsList').html(hotspotsHtml);
-                    } else {
-                        $('#hotspotsList').html('<div class="text-center text-muted py-3">No hotspots found</div>');
-                    }
-                })
-                .fail(function() {
-                    $('#hotspotsList').html('<div class="text-center text-danger py-3">Failed to load hotspots</div>');
-                });
-        }
-
-        // View incident details
-        function viewIncidentDetails(reportId) {
-            $('#incidentDetails').html(`
-                <div class="text-center">
-                    <i class="fas fa-sync fa-spin fa-2x mb-2"></i>
-                    <p>Loading incident details...</p>
-                </div>
-            `);
-
-            $('#viewReportBtn').attr('href', `/Admin/ReportDetails/${reportId}`);
-            $('#incidentModal').modal('show');
-
-            // Simulate loading details
-            setTimeout(() => {
-                $('#incidentDetails').html(`
-                    <p>Incident details would be loaded here for report ID: ${reportId}</p>
-                    <p>This would include full description, media files, verification status, etc.</p>
-                `);
-            }, 1000);
-        }
-
-        // Utility functions
-        function getMarkerColor(point) {
-            if (point.priority === 'Critical') return '#dc3545';
-            if (point.priority === 'High') return '#fd7e14';
-            if (point.status === 'Verified') return '#198754';
-            return '#ffc107';
-        }
-
-        function getClusterColor(intensity) {
-            if (intensity > 0.7) return '#dc3545';
-            if (intensity > 0.4) return '#fd7e14';
-            return '#ffc107';
-        }
-
-        function showLoading(elementId) {
-            $('#' + elementId).html(`
-                <div class="text-center text-muted">
-                    <i class="fas fa-sync fa-spin fa-2x mb-2"></i>
-                    <p>Loading...</p>
-                </div>
-            `);
-        }
-
-        function showError(elementId, message) {
-            $('#' + elementId).html(`
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle me-2"></i>${message}
-                </div>
-            `);
-        }
-
-        // Event handlers
-        $(document).ready(function() {
-            initMap();
-
-            // Filter form submission
-            $('#applyFilters').click(function() {
-                const filters = {
-                    category: $('#categoryFilter').val(),
-                    status: $('#statusFilter').val() || null,
-                    priority: $('#priorityFilter').val() || null,
-                    startDate: $('#startDateFilter').val(),
-                    endDate: $('#endDateFilter').val()
-                };
-                loadHeatMapData(filters);
-            });
-
-            // Map type switching
-            $('[data-map-type]').click(function() {
-                const mapType = $(this).data('map-type');
-                currentMapType = mapType;
-
-                // Update button states
-                $('[data-map-type]').removeClass('active').addClass('btn-outline-secondary');
-                $(this).removeClass('btn-outline-secondary').addClass('active btn-primary');
-
-                // Reload current data with new view
-                updateMap(currentData, []);
-            });
-
-            // Auto-refresh every 2 minutes
-            setInterval(() => {
-                loadHeatMapData();
-                loadHotspots();
-            }, 120000);
-        });
-
-    function loadHotspots() {
-        $.get('/HeatMap/GetIncidentHotspots')
-            .done(function (response) {
-                if (response.success && response.hotspots.length > 0) {
-                    let hotspotsHtml = '';
-
-                    response.hotspots.forEach(hotspot => {
-                        const riskClass =
-                            hotspot.riskScore > 0.7 ? 'risk-high' :
-                                hotspot.riskScore > 0.4 ? 'risk-medium' :
-                                    'risk-low';
-
-                        hotspotsHtml += `
-                            <div class="hotspot-item p-3 mb-3 ${riskClass}">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="fw-bold">${hotspot.location}</h6>
-                                    <span class="badge bg-danger">${hotspot.reportCount} Reports</span>
-                                </div>
-
-                                <div class="small text-muted">
-                                    <i class="fas fa-map-marker-alt me-1"></i>
-                                    ${hotspot.latitude.toFixed(4)}, ${hotspot.longitude.toFixed(4)}
-                                </div>
-
-                                <div class="mt-2">
-                                    <strong>Categories:</strong>
-                                    <span class="text-secondary">${hotspot.categories.join(', ')}</span>
-                                </div>
-
-                                <div class="mt-2">
-                                    <span class="badge bg-warning text-dark">
-                                        Risk Score: ${(hotspot.riskScore * 100).toFixed(0)}%
-                                    </span>
-                                </div>
-
-                                <div class="mt-2 small">
-                                    <strong>Latest:</strong> ${new Date(hotspot.latestIncident).toLocaleString()}
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    $('#hotspotsList').html(hotspotsHtml);
-                } else {
-                    $('#hotspotsList').html(`
-                        <div class="text-center text-muted py-3">
-                            No hotspots found.
-                        </div>
-                    `);
-                }
-            })
-            .fail(function () {
-                $('#hotspotsList').html(`
-                    <div class="alert alert-danger">
-                        Failed to load hotspots.
-                    </div>
-                `);
-            });
-    }
-
-    </script> *@

@@ -23,6 +23,8 @@ namespace ElectionShield.ViewModels
         public AdminVerificationViewModel? Verification { get; set; }
         public AIAnalysisViewModel? AIAnalysis { get; set; }
 
+        public string? AiTag { get; set; }
+
         // Helper properties
         public string StatusBadgeClass => Status switch
         {

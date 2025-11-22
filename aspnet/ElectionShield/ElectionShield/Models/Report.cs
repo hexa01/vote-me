@@ -52,6 +52,8 @@ namespace ElectionShield.Models
         public string? AiAnalysisResult { get; set; }
 
         public string? CreatedBy {get; set;}
+
+        public string? AiTag { get; set;}
     }
 
     public enum ReportStatus
