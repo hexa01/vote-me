@@ -132,7 +132,7 @@ namespace ElectionShield.Services
 
                     double riskScore = root.GetProperty("risk_score").GetDouble();
                     string aiTag = root.GetProperty("ai_tags").ToString();
-                    if(riskScore >= 0.5 || aiTag != null)
+                    if(riskScore >= 0.5 || aiTag != "[]")
                     {
                         report.AiTag = aiTag;
                         await _context.SaveChangesAsync();
