@@ -3,7 +3,6 @@ from modules.detector.detect import detect_image
 from modules.classifier.classify import classify
 from modules.utils.ocr import ocr_image
 import os
-
 def process_video(video_path, flag_model, person_model, classifier):
     cap = cv2.VideoCapture(video_path)
 
@@ -35,6 +34,7 @@ def process_video(video_path, flag_model, person_model, classifier):
             ocr_all.append(ocr_res)
 
             cls_res = classify(detect_results, ocr_res.get("text", ""))
+            cls_res["risk_score"] = min(cls_res.get("risk_score", 0) / 100, 1.0)
             classification_all.append(cls_res)
 
         count += 1
