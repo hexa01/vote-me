@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using static System.Net.WebRequestMethods;
 using ElectionShield.ViewModels;
 using System.Text.Json;
+using ElectionShield.Data;
 
 namespace ElectionShield.Controllers
 {
@@ -14,10 +15,14 @@ namespace ElectionShield.Controllers
         private readonly ILogger<NepalManifestoCompareController> _logger;
         private readonly HttpClient _http;
 
-        public NepalManifestoCompareController(ILogger<NepalManifestoCompareController> logger, HttpClient http)
+        private readonly ApplicationDbContext _context;
+
+
+        public NepalManifestoCompareController(ILogger<NepalManifestoCompareController> logger, HttpClient http, ApplicationDbContext context)
         {
             _logger = logger;
             _http = http;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -211,6 +216,29 @@ namespace ElectionShield.Controllers
         private string Truncate(string text, int maxLength)
         {
             return text.Length <= maxLength ? text : text.Substring(0, maxLength) + "...";
+        }
+
+
+        [HttpGet]
+
+        public async Task<IActionResult> SubmitManifesto()
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> SubmitManifesto(List<Manifesto> mf)
+        {
+            string? userId = HttpContext.Session.GetString("UserID");
+            foreach(var item in mf)
+            {
+                item.UserId = userId;
+                _context.Manifestos.Add(item);
+            }
+            await _context.SaveChangesAsync();
+
+            return View("/Views/Home/Index.cshtml");
         }
     }
 

@@ -18,6 +18,8 @@ namespace ElectionShield.Data
         public DbSet<AdminVerification> AdminVerifications { get; set; }
         public DbSet<AIAnalysis> AIAnalyses { get; set; }
 
+        public DbSet<Manifesto> Manifestos { get; set; } = default;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -66,6 +68,8 @@ namespace ElectionShield.Data
                       .WithOne(a => a.Report)
                       .HasForeignKey<AIAnalysis>(a => a.ReportId)
                       .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(r => r.AiTag)
+                      .HasMaxLength(200);
             });
 
             // MediaFile configuration

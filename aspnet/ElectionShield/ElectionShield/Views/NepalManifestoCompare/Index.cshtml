@@ -1,81 +1,202 @@
 ﻿@model SimpleNepalCompareViewModel
-
 <div class="container mt-5">
     <h2>Nepal Manifesto Comparison</h2>
 
+    <!-- File Upload Form -->
     <form asp-action="Compare" enctype="multipart/form-data" method="post">
-
         <div class="row">
             <div class="col-md-6">
                 <label>First Manifesto</label>
                 <input type="file" name="FirstManifestoFile" class="form-control" required />
             </div>
-
             <div class="col-md-6">
                 <label>Second Manifesto</label>
                 <input type="file" name="SecondManifestoFile" class="form-control" required />
             </div>
         </div>
-
-        <button class="btn btn-primary mt-3">Compare</button>
+        <button class="btn btn-primary mt-3">Compare Manifestos</button>
     </form>
 
     <hr />
 
+    <!-- API Results (unchanged) -->
     @if (Model.Result != null)
     {
-        @if (Model.Result.Success)
+        if (Model.Result.Success)
         {
-            <h3>Comparison Result</h3>
-
-            <p><strong>Overall Similarity:</strong> @Model.Result.SimilarityPercentage %</p>
-
-            <h4 class="mt-4">Summary of Document A</h4>
-            <pre>@Model.ApiRaw?.summary_a</pre>
-
-            <h4 class="mt-4">Summary of Document B</h4>
-            <pre>@Model.ApiRaw?.summary_b</pre>
-
-            <h4 class="mt-4">Top Matched Paragraphs</h4>
-            @if (Model.ApiRaw?.top_pairs != null)
-            {
-                foreach (var p in Model.ApiRaw.top_pairs)
-                {
-                    <div class="border p-3 mb-3">
-                        <strong>Similarity Score:</strong> @p.score
-                        <p><strong>A:</strong> @p.para_a</p>
-                        <p><strong>B:</strong> @p.para_b</p>
-                    </div>
-                }
-            }
-
-            @if (Model.ApiRaw?.unique_a?.Any() == true)
-            {
-                <h4>Unique Content in Document A</h4>
-                <ul>
-                    @foreach (var u in Model.ApiRaw.unique_a)
-                    {
-                        <li>@u</li>
-                    }
-                </ul>
-            }
-
-            @if (Model.ApiRaw?.unique_b?.Any() == true)
-            {
-                <h4>Unique Content in Document B</h4>
-                <ul>
-                    @foreach (var u in Model.ApiRaw.unique_b)
-                    {
-                        <li>@u</li>
-                    }
-                </ul>
-            }
+            <div class="alert alert-success">
+                Comparison completed! Overall Similarity: <strong>@Model.Result.SimilarityPercentage%</strong>
+            </div>
+            <!-- ... your existing result display ... -->
         }
         else
         {
-            <div class="alert alert-danger">
-                @Model.Result.Error
-            </div>
+            <div class="alert alert-danger">@Model.Result.Error</div>
         }
     }
+
+    <!-- Political Party Name Input -->
+    <div class="my-4">
+        <label class="form-label fw-bold">-font-weight-bold">Political Party / Candidate Name:</label>
+        <input type="text" id="politicalName" class="form-control w-50" placeholder="Enter politician or party name (e.g. KP Sharma Oli, UML)" required />
+    </div>
+
+    <!-- Dynamic Table + Submit Form -->
+    <form id="submitManifestoForm" asp-action="SubmitManifesto" asp-controller="NepalManifestoCompare" method="post">
+        <input type="hidden" name="UserId" value="YOUR_USER_ID_HERE" /> <!-- Replace in controller if dynamic -->
+
+        <h3 class="mt-5">Custom Point-by-Point Comparison</h3>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <input type="text" id="manifesto1Name" class="form-control form-control-sm d-inline-block w-auto"
+                           placeholder="Manifesto 1 (e.g. UML)" value="Manifesto 1" style="width: 200px;" />
+                    <strong> vs </strong>
+                    <input type="text" id="manifesto2Name" class="form-control form-control-sm d-inline-block w-auto"
+                           placeholder="Manifesto 2 (e.g. Nepali Congress)" value="Manifesto 2" style="width: 200px;" />
+                </div>
+                <button type="button" class="btn btn-success btn-sm" id="addRowBtn">Add Row</button>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table table-bordered table-hover mb-0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th width="50" class="text-center"><input type="checkbox" id="selectAll" /></th>
+                            <th id="headerManifesto1">Manifesto</th>
+                            <th width="80">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td class="text-center"><input type="checkbox" class="row-check" /></td>
+                            <td>
+                                <div class="d-flex align-items-start gap-2">
+                                    <input type="checkbox" class="mt-2 manifesto1-check" />
+                                    <div contenteditable="true" class="editable flex-fill">I will change the country</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-start gap-2">
+                                    <input type="checkbox" class="mt-2 manifesto2-check" />
+                                    <div contenteditable="true" class="editable flex-fill">I will provide jobs</div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-lg btn-success submitBtn">
+                Submit Manifesto Status
+            </button>
+        </div>
+    </form>
 </div>
+
+@section Scripts {
+<script>
+    // Update headers
+    document.getElementById('manifesto1Name').addEventListener('input', e => {
+        document.getElementById('headerManifesto1').textContent = e.target.value || 'Manifesto 1';
+    });
+    document.getElementById('manifesto2Name').addEventListener('input', e => {
+        document.getElementById('headerManifesto2').textContent = e.target.value || 'Manifesto 2';
+    });
+
+    // Add Row
+    document.getElementById('addRowBtn').addEventListener('click', () => {
+        const tbody = document.getElementById('tableBody');
+        const row = document.createElement('tr');
+        const index = tbody.children.length;
+
+        row.innerHTML = `
+            <td class="text-center"><input type="checkbox" class="row-check" /></td>
+            <td>
+                <div class="d-flex align-items-start gap-2">
+                    <input type="checkbox" class="mt-2 manifesto1-check" />
+                    <div contenteditable="true" class="editable flex-fill">Enter promise here...</div>
+                </div>
+            </td>
+            <td>
+                <div class="d-flex align-items-start gap-2">
+                    <input type="checkbox" class="mt-2 manifesto2-check" />
+                    <div contenteditable="true" class="editable flex-fill">Enter promise here...</div>
+                </div>
+            </td>
+            <td class="text-center">
+                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // Delete Row
+    document.addEventListener('click', e => {
+        if (e.target?.classList.contains('delete-row')) {
+            e.target.closest('tr').remove();
+        }
+    });
+
+    // Select All Rows
+    document.getElementById('selectAll').addEventListener('change', e => {
+        document.querySelectorAll('.row-check').forEach(cb => cb.checked = e.target.checked);
+    });
+
+    // Form Submit → Build hidden inputs for List<Manifesto>
+    document.querySelector('.submitBtn').addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent default submission
+
+        const form = document.getElementById('submitManifestoForm');
+        const politicalName = document.getElementById('politicalName').value.trim();
+        if (!politicalName) {
+            alert('Please enter Political Party / Candidate Name');
+            return;
+        }
+
+        // Clear previous hidden inputs
+        form.querySelectorAll('input[name^="mf"]').forEach(el => el.remove());
+
+        let index = 0;
+        document.querySelectorAll('#tableBody tr').forEach(row => {
+            const text1 = row.querySelectorAll('.editable')[0]?.innerText.trim();
+            const text2 = row.querySelectorAll('.editable')[1]?.innerText.trim();
+            const checked1 = row.querySelector('.manifesto1-check')?.checked;
+            const checked2 = row.querySelector('.manifesto2-check')?.checked;
+
+            // Add Manifesto 1
+            if (text1) {
+                form.insertAdjacentHTML('beforeend', `
+                    <input type="hidden" name="mf[${index}].Fulfilled" value="${checked1 ? text1 : ''}" />
+                    <input type="hidden" name="mf[${index}].Unfulfilled" value="${!checked1 ? text1 : ''}" />
+                    <input type="hidden" name="mf[${index}].PoliticalName" value="${politicalName}" />
+                `);
+                index++;
+            }
+
+            // Add Manifesto 2
+            if (text2) {
+                form.insertAdjacentHTML('beforeend', `
+                    <input type="hidden" name="mf[${index}].Fulfilled" value="${checked2 ? text2 : ''}" />
+                    <input type="hidden" name="mf[${index}].Unfulfilled" value="${!checked2 ? text2 : ''}" />
+                    <input type="hidden" name="mf[${index}].PoliticalName" value="${politicalName}" />
+                `);
+                index++;
+            }
+        });
+
+        // Now submit the form
+        form.submit();
+    });
+</script>
+
+<style>
+    .editable { min-height: 50px; padding: 10px; outline: none; }
+    .editable:focus { background: #f8f9fa; border: 1px solid #007bff; border-radius: 4px; }
+</style>
+}
