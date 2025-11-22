@@ -6,3 +6,8 @@ fastapi
 uvicorn
 easyocr
 pillow
+pypdf2
+pytesseract
+pdf2image
+transformers
+sentence-transformers

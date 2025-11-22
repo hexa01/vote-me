@@ -121,12 +121,13 @@ def classify(detect_results: Dict[str, Any], ocr_text: str = "") -> Dict[str, An
 
     # FINAL SCORING
     score = int(min(score, config.MAX_RISK))
+    normalized_score = score / config.MAX_RISK
 
     summary = "; ".join(tags) if tags else "no_suspicious_activity_detected"
 
     return {
         "ai_tags": tags,
-        "risk_score": score,
+        "risk_score": normalized_score,
         "summary": summary,
         "reasons": reasons,
         "counts": counts,

@@ -9,17 +9,13 @@ _reader = None
 def get_reader(device='cpu', lang_list=None):
     global _reader
     if _reader is None:
-        # ne nepali en english
+        # ne en
         if lang_list is None:
             lang_list = ['ne', 'en']
         _reader = easyocr.Reader(lang_list, gpu=False)
     return _reader
 
 def ocr_image(image_path, lang_list=None, rotate=False):
-    """
-    Run EasyOCR on an image and return concatenated text and raw results.
-    rotate: if True, the function will try simple 90-degree rotations if no text found
-    """
     reader = get_reader(lang_list=lang_list)
     img = Image.open(image_path).convert('RGB')
     img_np = __pil_to_np(img)
