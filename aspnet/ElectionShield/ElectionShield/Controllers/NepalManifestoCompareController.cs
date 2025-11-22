@@ -3,16 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 using ElectionShield.Models;
 using System.Text;
 using System.Text.RegularExpressions;
+using static System.Net.WebRequestMethods;
+using ElectionShield.ViewModels;
+using System.Text.Json;
 
 namespace ElectionShield.Controllers
 {
     public class NepalManifestoCompareController : Controller
     {
         private readonly ILogger<NepalManifestoCompareController> _logger;
+        private readonly HttpClient _http;
 
-        public NepalManifestoCompareController(ILogger<NepalManifestoCompareController> logger)
+        public NepalManifestoCompareController(ILogger<NepalManifestoCompareController> logger, HttpClient http)
         {
             _logger = logger;
+            _http = http;
         }
 
         public IActionResult Index()
@@ -23,44 +28,71 @@ namespace ElectionShield.Controllers
         [HttpPost]
         public async Task<IActionResult> Compare(SimpleNepalCompareViewModel model)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View("Index", model);
-            //}
+            if (model.FirstManifestoFile == null || model.SecondManifestoFile == null)
+            {
+                model.Result = new SimpleComparisonResult
+                {
+                    Success = false,
+                    Error = "Both manifesto files are required."
+                };
+                return View("Index", model);
+            }
 
             try
             {
-                // Extract text from both files
-                var text1 = await ExtractTextFromFile(model.FirstManifestoFile);
-                var text2 = await ExtractTextFromFile(model.SecondManifestoFile);
+                string apiUrl = "http://192.168.88.183:8000/manifesto/compare_summary";
 
-                if (string.IsNullOrWhiteSpace(text1) || string.IsNullOrWhiteSpace(text2))
+                using var form = new MultipartFormDataContent();
+                form.Add(new StreamContent(model.FirstManifestoFile.OpenReadStream()), "file_a", model.FirstManifestoFile.FileName);
+                form.Add(new StreamContent(model.SecondManifestoFile.OpenReadStream()), "file_b", model.SecondManifestoFile.FileName);
+
+                var response = await _http.PostAsync(apiUrl, form);
+
+                if (!response.IsSuccessStatusCode)
                 {
                     model.Result = new SimpleComparisonResult
                     {
                         Success = false,
-                        Error = "Could not extract text from the uploaded files. Please ensure they contain readable text."
+                        Error = "API call failed. Status: " + response.StatusCode
                     };
                     return View("Index", model);
                 }
 
-                // Compare the texts
-                var result = CompareManifestos(text1, text2);
-                model.Result = result;
+                string apiText = await response.Content.ReadAsStringAsync();
+
+                var apiResponse = JsonSerializer.Deserialize<CompareApiResponse>(apiText, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                model.Result = new SimpleComparisonResult
+                {
+                    Success = true,
+                    SimilarityPercentage = apiResponse?.overall_score ?? 0,
+                    ComparisonPoints = apiResponse?.top_pairs?.Select(tp => $"Score: {tp.score}, A: {tp.para_a}, B: {tp.para_b}").ToList() ?? new List<string>(),
+                    SimilarPromises = apiResponse?.top_pairs?.Count ?? 0,
+                    DifferentPromises = 0,
+                    TotalPromisesFound = apiResponse?.top_pairs?.Count ?? 0
+                };
+
+                model.ApiRaw = apiResponse;
 
                 return View("Index", model);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error comparing manifestos");
+                _logger.LogError(ex, "Error contacting comparison API");
+
                 model.Result = new SimpleComparisonResult
                 {
                     Success = false,
-                    Error = "An error occurred while comparing the manifestos. Please try again."
+                    Error = "Unexpected error calling the comparison service."
                 };
+
                 return View("Index", model);
             }
         }
+
 
         private async Task<string> ExtractTextFromFile(IFormFile file)
         {
@@ -162,7 +194,6 @@ namespace ElectionShield.Controllers
 
         private double CalculateSimilarity(string text1, string text2)
         {
-            // Simple word-based similarity
             var words1 = text1.Split(' ', '।', ',', ';', ':').Where(w => w.Length > 1).ToArray();
             var words2 = text2.Split(' ', '।', ',', ';', ':').Where(w => w.Length > 1).ToArray();
 
@@ -174,9 +205,14 @@ namespace ElectionShield.Controllers
             return totalWords > 0 ? (double)commonWords / totalWords : 0;
         }
 
+
+
+
         private string Truncate(string text, int maxLength)
         {
             return text.Length <= maxLength ? text : text.Substring(0, maxLength) + "...";
         }
     }
+
+
 }

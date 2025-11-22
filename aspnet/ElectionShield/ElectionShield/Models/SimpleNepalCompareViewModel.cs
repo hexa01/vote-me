@@ -13,6 +13,7 @@ namespace ElectionShield.Models
         public IFormFile SecondManifestoFile { get; set; }
 
         public SimpleComparisonResult Result { get; set; }
+        public CompareApiResponse ApiRaw { get; set; }
     }
 
     public class SimpleComparisonResult
@@ -25,4 +26,23 @@ namespace ElectionShield.Models
         public int DifferentPromises { get; set; }
         public List<string> ComparisonPoints { get; set; } = new List<string>();
     }
+
+
+    public class CompareApiResponse
+    {
+        public double overall_score { get; set; }
+        public List<TopPair> top_pairs { get; set; }
+        public string summary_a { get; set; }
+        public string summary_b { get; set; }
+        public List<string> unique_a { get; set; }
+        public List<string> unique_b { get; set; }
+    }
+
+    public class TopPair
+    {
+        public double score { get; set; }
+        public string para_a { get; set; }
+        public string para_b { get; set; }
+    }
+
 }
