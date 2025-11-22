@@ -271,7 +271,6 @@ namespace ElectionShield.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyReport(Guid reportId, VerificationStatus status, string? comments)
         {
             try
@@ -286,7 +285,7 @@ namespace ElectionShield.Controllers
                     VerifiedAt = DateTime.UtcNow
                 };
 
-                _context.AdminVerifications.Add(verification);
+                // _context.AdminVerifications.Add(verification);
 
                 var report = await _context.Reports.FindAsync(reportId);
                 if (report != null)
