@@ -39,21 +39,32 @@
                                 <i class="fas fa-search me-1"></i>Track Report
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="UserPortal">
-                                <i class="fas fa-search me-1"></i>User Portal
+
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-tools me-1"></i>Tools
                             </a>
-                        </li> 
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Rules">
-                                <i class="fas fa-search me-1"></i>Election Rules
-                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "NepalManifestoCompare")">
+                                        <i class="fas fa-balance-scale me-2"></i>Manifesto Compare
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Rules">
+                                        <i class="fas fa-book me-1"></i>Election Rules
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="UserPortal">
+                                        <i class="fas fa-user me-1"></i>User Portal
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "NepalManifestoCompare")">
-                                <i class="fas fa-balance-scale me-1"></i>Manifesto Compare
-                            </a>
-                        </li>
+
                         @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
                         {
                             <li class="nav-item dropdown">
@@ -61,10 +72,11 @@
                                     <i class="fas fa-user-shield me-1"></i>Admin
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="PendingReports"><i class="fas fa-clock me-2"></i>Pending Reports</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard">
+                                            <i class="fas fa-tachometer-alt me-2"></i>Go To Admin
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         }
@@ -74,6 +86,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @if (TempData["SuccessMessage"] != null)

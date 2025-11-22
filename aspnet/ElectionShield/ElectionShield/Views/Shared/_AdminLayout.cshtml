@@ -4,73 +4,53 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ElectionShield Admin</title>
+
+    <!-- Bootstrap 5 CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ElectionShield.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css" />
+
     <style>
+        body {
+            overflow-x: hidden;
+        }
+
         .sidebar {
             background: #2c3e50;
             min-height: 100vh;
-            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+            padding-top: 1rem;
         }
 
-        .sidebar .nav-link {
-            color: #ecf0f1;
-            padding: 15px 20px;
-            border-left: 4px solid transparent;
-            transition: all 0.3s;
-        }
+            .sidebar .nav-link {
+                color: #ecf0f1;
+                padding: 12px 20px;
+                transition: all 0.3s;
+            }
 
-        .sidebar .nav-link:hover {
-            background: #34495e;
-            color: #3498db;
-            border-left-color: #3498db;
-        }
+                .sidebar .nav-link:hover {
+                    background: #34495e;
+                    color: #3498db;
+                }
 
-        .sidebar .nav-link.active {
-            background: #34495e;
-            color: #3498db;
-            border-left-color: #3498db;
-            font-weight: 600;
-        }
+                .sidebar .nav-link.active {
+                    background: #34495e;
+                    color: #3498db;
+                    font-weight: 600;
+                }
 
-        .sidebar .nav-link i {
-            width: 20px;
-            margin-right: 10px;
-        }
+                .sidebar .nav-link i {
+                    margin-right: 10px;
+                    width: 20px;
+                }
+
+            .sidebar .submenu {
+                padding-left: 20px;
+            }
 
         .main-content {
             background: #f8f9fa;
             min-height: 100vh;
-        }
-
-        .stat-card {
-            border-radius: 10px;
-            border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-card .card-body {
-            padding: 1.5rem;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-icon {
-            font-size: 2.5rem;
-            opacity: 0.7;
         }
 
         .navbar-admin {
@@ -82,145 +62,117 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 col-lg-2 sidebar d-md-block collapse">
-                <div class="position-sticky pt-3">
-                    <div class="text-center mb-4">
-                        <h4 class="text-white">
-                            <i class="fas fa-shield-alt me-2"></i>
-                            ElectionShield
-                        </h4>
-                        <small class="text-muted">Admin Portal</small>
-                    </div>
-
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewBag.ActiveSection == "dashboard" ? "active" : "")"
-                               asp-controller="Admin" asp-action="Dashboard">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewBag.ActiveSection == "pending" ? "active" : "")"
-                               asp-controller="Admin" asp-action="PendingReports">
-                                <i class="fas fa-clock"></i>
-                                Pending Reports
-                                <span class="badge bg-warning float-end" id="pendingCount">0</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewBag.ActiveSection == "all" ? "active" : "")"
-                               asp-controller="Admin" asp-action="AllReports">
-                                <i class="fas fa-list"></i>
-                                All Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewBag.ActiveSection == "verified" ? "active" : "")"
-                               asp-controller="Admin" asp-action="VerifiedReports">
-                                <i class="fas fa-check-circle"></i>
-                                Verified Reports
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewBag.ActiveSection == "heatmap" ? "active" : "")"
-                               asp-controller="HeatMap" asp-action="Index">
-                                <i class="fas fa-map-marked-alt"></i>
-                                Heat Map
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewBag.ActiveSection == "analytics" ? "active" : "")"
-                               asp-controller="Admin" asp-action="Analytics">
-                                <i class="fas fa-chart-bar"></i>
-                                Analytics
-                            </a>
-                        </li>
-                        <li class="nav-item mt-4">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">
-                                <i class="fas fa-arrow-left"></i>
-                                Back to Site
-                            </a>
-                        </li>
-                    </ul>
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar d-md-block collapse">
+                <div class="text-center mb-4">
+                    <h4 class="text-white"><i class="fas fa-shield-alt me-2"></i>ElectionShield</h4>
+                    <small class="text-muted">Admin Portal</small>
                 </div>
-            </div>
 
-            @Html.Partial("~/Views/PartialViews/PVReportManage.cshtml")
-            <!-- Main content -->
-            <div class="col-md-9 col-lg-10 main-content">
-                <!-- Top Navbar -->
-                <nav class="navbar navbar-admin navbar-expand-lg">
-                    <div class="container-fluid">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewBag.ActiveSection == "dashboard" ? "active" : "")" asp-controller="Admin" asp-action="Dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
 
-                        <div class="d-flex">
-                            <form class="d-flex me-3" method="get" asp-action="SearchReports">
-                                <input class="form-control me-2" type="search" name="query" placeholder="Search reports..." aria-label="Search">
-                                <button class="btn btn-outline-primary" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </form>
-
-                            <partial name="_LoginPartial" />
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewBag.ActiveSection == "reports" ? "active" : "")" data-bs-toggle="collapse" href="#reportsSubmenu" role="button" aria-expanded="false" aria-controls="reportsSubmenu">
+                            <i class="fas fa-file-alt"></i> Reports <i class="fas fa-chevron-down float-end"></i>
+                        </a>
+                        <div class="collapse submenu" id="reportsSubmenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewBag.ActiveSection == "pending" ? "active" : "")" asp-controller="Admin" asp-action="PendingReports">
+                                        <i class="fas fa-clock"></i> Pending Reports <span class="badge bg-warning float-end" id="pendingCount">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewBag.ActiveSection == "all" ? "active" : "")" asp-controller="Admin" asp-action="AllReports">
+                                        <i class="fas fa-list"></i> All Reports
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewBag.ActiveSection == "verified" ? "active" : "")" asp-controller="Admin" asp-action="VerifiedReports">
+                                        <i class="fas fa-check-circle"></i> Verified Reports
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewBag.ActiveSection == "heatmap" ? "active" : "")" asp-controller="HeatMap" asp-action="Index">
+                            <i class="fas fa-map-marked-alt"></i> Heat Map
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewBag.ActiveSection == "analytics" ? "active" : "")" asp-controller="Admin" asp-action="Analytics">
+                            <i class="fas fa-chart-bar"></i> Analytics
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewBag.ActiveSection == "tools" ? "active" : "")" data-bs-toggle="collapse" href="#toolsSubmenu" role="button" aria-expanded="false" aria-controls="toolsSubmenu">
+                            <i class="fas fa-tools"></i> Tools <i class="fas fa-chevron-down float-end"></i>
+                        </a>
+                        <div class="collapse submenu" id="toolsSubmenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Tools" asp-action="ImportData"><i class="fas fa-file-import"></i> Import Data</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Tools" asp-action="ExportData"><i class="fas fa-file-export"></i> Export Data</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Tools" asp-action="Settings"><i class="fas fa-cog"></i> Settings</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item mt-4">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-arrow-left"></i> Back to Site
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="col-md-9 col-lg-10 main-content">
+                <nav class="navbar navbar-admin navbar-expand-lg px-3">
+                    <button class="btn btn-outline-secondary d-md-none me-3" type="button" data-bs-toggle="collapse" data-bs-target=".sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <form class="d-flex me-auto" method="get" asp-action="SearchReports">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Search reports..." aria-label="Search">
+                        <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+
+                    <partial name="_LoginPartial" />
                 </nav>
 
                 <!-- Page content -->
                 <main class="px-3 py-4">
-                    @if (TempData["SuccessMessage"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fas fa-check-circle me-2"></i>
-                            @TempData["SuccessMessage"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
-
-                    @if (TempData["ErrorMessage"] != null)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="fas fa-exclamation-circle me-2"></i>
-                            @TempData["ErrorMessage"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
-
                     @RenderBody()
                 </main>
             </div>
         </div>
     </div>
 
+    <!-- JS Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
     <script>
-        // Update pending count badge
         $(document).ready(function() {
-            // You can fetch the actual count via AJAX if needed
-            // For now, we'll set it from the view data
         @if (ViewBag.PendingCount != null)
         {
             <text>$('#pendingCount').text('@ViewBag.PendingCount');</text>
         }
-
-            // Initialize DataTables
-            $('.table').DataTable({
-                pageLength: 25,
-                responsive: true
-            });
         });
     </script>
-
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
