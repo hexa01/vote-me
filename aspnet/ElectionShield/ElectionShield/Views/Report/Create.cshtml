@@ -213,18 +213,27 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-
-$(document).ready(async function () {
-
-    if(!localStorage.getItem("userId")){
-        alert("Log in to report Incident");
-        window.location.href = "/Home/Index";
+        if(!localStorage.getItem("userId")){
+        Swal.fire({
+            title: "Error",
+            text: "Log in to report",
+            icon: "error",
+            confirmButtonText: "OK"
+        }).then((result) => {
+            if(result.isConfirmed){
+                window.location.href = "/Home/Index";
+            }
+        });
     }
     else{
         $(".uid").val(localStorage.getItem("userId"));
     }
+$(document).ready(async function () {
+
+
 
     let latLong = await getIncidents();
     addReportMarkers(latLong);
